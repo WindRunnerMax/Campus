@@ -1,0 +1,3 @@
+<view>
+  <calendar inner-text="Some text"></calendar>
+</view>
