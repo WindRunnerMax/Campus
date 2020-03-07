@@ -91,7 +91,7 @@ Component({
           } else if (week && week < this.data.weekCount) {
             var tmpColor = "classes ";
             unitObj.type = "教学"; unitObj.detach = "cdetach";
-            if (week >= this.data.vacationStart) { unitObj.type = "假期"; tmpColor = "vacation "; }
+            if (week >= this.data.vacationStart) { unitObj.type = "假期"; tmpColor = "vacation "; unitObj.detach=""; }
             unitObj.color += tmpColor;
           }
           innerArr.push(unitObj);
@@ -99,7 +99,6 @@ Component({
         }
         showArr.push(innerArr);
       }
-      console.log(showArr)
       this.setData({
         calendarData: showArr
       })

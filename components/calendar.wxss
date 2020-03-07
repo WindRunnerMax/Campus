@@ -62,17 +62,17 @@ page{
   color: #ddd !important;
 }
 
-.today .u,.termStart .u,.vacationStart .u{
+.today > .u,.termStart > .u,.vacationStart > .u{
   color: #fff !important;
   border-radius: 30px;
   background: #1E9FFF;
 }
 
-.termStart .u{
+.termStart > .u{
   background: #FF6347;
 }
 
-.vacationStart .u{
+.vacationStart > .u{
   background: #3CB371;
 }
 
@@ -84,7 +84,7 @@ page{
     font-size: 11px;
 }
 
-.curMonth .cdetach{
+.curMonth > .cdetach{
   color: #999;
 }
 
@@ -132,6 +132,10 @@ page{
 	border-radius: 8px;
 	background-color: #1E9FFF;
   margin-right: 5px; 
+}
+
+.a-dot + view{
+  margin-right: 5px;
 }
 
 .info view{

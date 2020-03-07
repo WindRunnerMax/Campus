@@ -31,7 +31,7 @@
 <view class="card y-CenterCon info">
   <view style="width: 40%;">
     <view class="a-dot" style="background: #3CB371;"></view>
-    <view style="margin-right: 10px;">学期:{{term}}</view>
+    <view >学期:{{term}}</view>
   </view>
   <view style="width: 24%;">
     <view class="a-dot" style="background: #9F8BEC;"></view>
@@ -39,14 +39,14 @@
   </view>
   <view style="width: 36%;">
     <view class="a-dot" style="background: #FF6347;"></view>
-    <view style="margin-right: 10px;">开学:{{termStart}}</view>
+    <view >开学:{{termStart}}</view>
   </view>
 </view>
 
 <view class="card y-CenterCon info">
   <view style="width: 40%;">
     <view class="a-dot" style="background: #3CB371;"></view>
-    <view style="margin-right: 10px;">假期:{{vacationStartDate}}</view>
+    <view >假期:{{vacationStartDate}}</view>
   </view>
   <view style="width: 24%;">
     <view class="a-dot" style="background: #9F8BEC;"></view>
@@ -54,6 +54,6 @@
   </view>
   <view style="width: 36%;">
     <view class="a-dot" style="background: #FF6347;"></view>
-    <view style="margin-right: 10px;">距假期:{{vacationDateDiff}}天</view>
+    <view >距假期:{{vacationDateDiff}}天</view>
   </view>
 </view>
