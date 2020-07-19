@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "time-table": "/components/time-table/time-table",
+    "layout": "/components/common/layout"
+  }
+}

@@ -1,0 +1,1 @@
+<view><view hidden="{{!(title)}}" class="lay-line"><view class="lay-left-con"><view class="lay-verline" style="{{'background:'+(color)+';'}}"></view><view>{{title}}</view></view><view><slot name="headslot"></slot></view></view><view class="{{['lay-card',(!topSpace)?'lay-min-top':'']}}" style="{{'color:'+(computedColor)+';'}}"><slot></slot></view></view>

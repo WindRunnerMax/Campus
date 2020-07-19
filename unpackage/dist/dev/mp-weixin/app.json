@@ -1,0 +1,25 @@
+{
+  "pages": [
+    "pages/home/index/index",
+    "pages/home/system/not-found",
+    "pages/study/time-table/time-table"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "校园小程序组件库",
+    "navigationBarBackgroundColor": "#F1F1F1",
+    "backgroundColor": "#F8F8F8"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "地图定位功能"
+    }
+  },
+  "navigateToMiniProgramAppIdList": [
+    "wxa53da62a53aaddea",
+    "wx387c0e87230e4cc9"
+  ],
+  "usingComponents": {},
+  "sitemapLocation": "sitemap39.json"
+}
