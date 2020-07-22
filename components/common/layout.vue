@@ -61,10 +61,6 @@
         margin: 2px 5px;
     }
 
-    .lay-verline + view{
-        color: #000000;
-    }
-
     .lay-card {
         font-size: 13px;
         background-color: #FFFFFF;

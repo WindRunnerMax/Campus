@@ -36,10 +36,10 @@
 
         <layout title="生活" color="#9F8BEC" :inherit-color="true">
             <view class="y-center">
-                <view class="unit">
+                <navigator url="/pages/life/calendar/calendar" open-type="navigate" class="unit">
                     <i class="iconfont icon-calendar"></i>
                     <view>校历</view>
-                </view>
+                </navigator>
                 <view class="unit">
                     <i class="iconfont icon-vacation"></i>
                     <view>放假安排</view>

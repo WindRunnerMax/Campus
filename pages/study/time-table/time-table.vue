@@ -1,6 +1,5 @@
 <template>
 	<view>
-        <layout title="课表" :top-space="false">
             <time-table
                 :week="23"
                 term-start="2020-02-10"
@@ -9,16 +8,14 @@
                 @pre="pre"
                 @next="next">
             </time-table>
-        </layout>
 	</view>
 </template>
 
 <script>
-    import layout from "@/components/common/layout.vue"
     import timeTable from "@/components/time-table/time-table.vue";
 	export default {
         components:{
-          layout, timeTable
+            timeTable
         },
 		data: function() {
 			return {

@@ -11,6 +11,10 @@
             "path" : "pages/study/time-table/time-table",
             "style" : {}
         }
+        ,{
+            "path" : "pages/life/calendar/calendar",
+            "style" : {}
+        }
     ],
     "globalStyle": {
         "navigationBarTextStyle": "black",

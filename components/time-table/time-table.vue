@@ -1,47 +1,51 @@
 <template>
     <view>
-
-        <view class="y-center status-con">
-            <view class="week">第{{week}}周</view>
-            <view class="y-center">
-                <view class="a-btn a-btn-white a-btn-mini refresh" @tap="refresh(week)">
-                    <view class="iconfont icon-shuaxin1"></view>
-                </view>
-                <view class="a-btn a-btn-white a-btn-mini pre" @tap="pre(week)">
-                    <view class="iconfont icon-arrow-lift"></view>
-                </view>
-                <view class="a-btn a-btn-white a-btn-mini next" @tap="next(week)">
-                    <view class="iconfont icon-arrow-right"></view>
-                </view>
-            </view>
-        </view>
-        <view class="a-hr hr"></view>
-        <view class="a-flex">
-            <view v-for="(item, index) in [0,1,2,3,4,5,6]" :key="index" class="week-unit">
-                <view>{{date[index].n}}</view>
-                <view :class="date[index].s">{{date[index].d ? date[index].d : "00/00"}}</view>
-            </view>
-        </view>
-        <view class="a-hr hr"></view>
-        <view v-for="column in [0,1,2,3,4]" :key="column" >
-            <view class="a-flex" >
-                <view v-for="row in [0,1,2,3,4,5,6]" :key="row" class="a-full">
-                    <view v-if="computedTable[column] && computedTable[column][row]" class="table-unit"
-                        :style="{'background':computedTable[column][row].background}">
-                        <view v-for="(unit, index) in computedTable[column][row].table" :key="index">{{unit}}</view>
+        <layout title="课表" :top-space="false">
+            <view class="y-center status-con">
+                <view class="week">第{{week}}周</view>
+                <view class="y-center">
+                    <view class="a-btn a-btn-white a-btn-mini refresh" @tap="refresh(week)">
+                        <view class="iconfont icon-shuaxin1"></view>
                     </view>
-                    <view v-else class="table-unit"></view>
+                    <view class="a-btn a-btn-white a-btn-mini pre" @tap="pre(week)">
+                        <view class="iconfont icon-arrow-lift"></view>
+                    </view>
+                    <view class="a-btn a-btn-white a-btn-mini next" @tap="next(week)">
+                        <view class="iconfont icon-arrow-right"></view>
+                    </view>
                 </view>
             </view>
             <view class="a-hr hr"></view>
-        </view>
-
+            <view class="a-flex">
+                <view v-for="(item, index) in [0,1,2,3,4,5,6]" :key="index" class="week-unit">
+                    <view>{{date[index].n}}</view>
+                    <view :class="date[index].s">{{date[index].d ? date[index].d : "00/00"}}</view>
+                </view>
+            </view>
+            <view class="a-hr hr"></view>
+            <view v-for="column in [0,1,2,3,4]" :key="column" >
+                <view class="a-flex" >
+                    <view v-for="row in [0,1,2,3,4,5,6]" :key="row" class="a-full">
+                        <view v-if="computedTable[column] && computedTable[column][row]" class="table-unit"
+                            :style="{'background':computedTable[column][row].background}">
+                            <view v-for="(unit, index) in computedTable[column][row].table" :key="index">{{unit}}</view>
+                        </view>
+                        <view v-else class="table-unit"></view>
+                    </view>
+                </view>
+                <view class="a-hr hr"></view>
+            </view>
+        </layout>
     </view>
 </template>
 
 <script>
     import { formatDate, extDate } from "../utils/datetime.js";
+    import layout from "../common/layout.vue"
     export default {
+        components:{
+            layout
+        },
         name: "time-table",
         data: function() {
             return {
@@ -62,8 +66,10 @@
                 default: "2020-01-01"
             }
         },
-        created: function() {
+        beforeCreate: function(){
             extDate();
+        },
+        created: function() {
             var week = this.week;
             var today = new Date();
             var curWeekDate = new Date(this.termStart);
