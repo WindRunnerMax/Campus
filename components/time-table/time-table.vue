@@ -70,21 +70,7 @@
             extDate();
         },
         created: function() {
-            var week = this.week;
-            var today = new Date();
-            var curWeekDate = new Date(this.termStart);
-            curWeekDate.addDate(0, 0, week * 7 - 8);
-            var allWeekDay = [];
-            var week = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
-            for (let i = 0; i < 7; ++i) {
-                curWeekDate.addDate(0, 0, 1);
-                allWeekDay.push({
-                    n: week[i],
-                    d: formatDate("MM/dd", curWeekDate),
-                    s: curWeekDate.getDay() === today.getDay() ? "today" : "none"
-                });
-            }
-            this.date = allWeekDay;
+            this.getDate(this.week);
         },
         computed: {
             computedTable: function(){
@@ -109,10 +95,28 @@
             },
             pre: function(week){
                 this.$emit("pre", week);
+                this.getDate(week);
             },
             next: function(week){
                 this.$emit("next", week);
+                this.getDate(week);
             },
+            getDate: function(week){
+                var today = new Date();
+                var curWeekDate = new Date(this.termStart);
+                curWeekDate.addDate(0, 0, week * 7 - 8);
+                var allWeekDay = [];
+                var week = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
+                for (let i = 0; i < 7; ++i) {
+                    curWeekDate.addDate(0, 0, 1);
+                    allWeekDay.push({
+                        n: week[i],
+                        d: formatDate("MM/dd", curWeekDate),
+                        s: curWeekDate.getDay() === today.getDay() ? "today" : "none"
+                    });
+                }
+                this.date = allWeekDay;
+            }
         }
     }
 </script>

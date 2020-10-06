@@ -22,7 +22,6 @@
         props: {
             title: {
                 type: String,
-                required: true
             },
             color: {
                 type: String,

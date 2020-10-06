@@ -44,7 +44,7 @@
 ```
 
 ### 参数说明
-* `term`: 当前学期 
-* `termStart`: 开学日期
-* `weekCount`: 该学期总周次
-* `vacationStart`: 假期开始周次
+* `term`: 当前学期。
+* `termStart`: 开学日期。
+* `weekCount`: 该学期总周次。
+* `vacationStart`: 假期开始周次。
