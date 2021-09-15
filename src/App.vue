@@ -1,5 +1,6 @@
 <script lang="ts">
-export default {
+import Vue from "vue";
+export default Vue.extend({
     onLaunch() {
         console.log("App Launch");
     },
@@ -9,9 +10,12 @@ export default {
     onHide() {
         console.log("App Hide");
     },
-};
+});
 </script>
 
-<style>
+<style lang="scss">
 /*每个页面公共css */
+@import "@/components/styles/asse.css";
+@import "@/components/styles/asse.scss";
+@import "@/components/styles/iconfont.css";
 </style>
