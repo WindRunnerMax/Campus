@@ -69,10 +69,11 @@ export const formatDate = (fmt = "yyyy-MM-dd", date = safeDate()): string => {
  * 增加时间
  */
 export const addDate = (date: Date, years = 0, months = 0, days = 0): Date => {
-    if (days !== 0) date.setDate(date.getDate() + days);
-    if (months !== 0) date.setMonth(date.getMonth() + months);
-    if (years !== 0) date.setFullYear(date.getFullYear() + years);
-    return date;
+    const newDate = safeDate(date);
+    if (days !== 0) newDate.setDate(newDate.getDate() + days);
+    if (months !== 0) newDate.setMonth(newDate.getMonth() + months);
+    if (years !== 0) newDate.setFullYear(newDate.getFullYear() + years);
+    return newDate;
 };
 
 /**
