@@ -10,7 +10,7 @@ export type Tables = Array<
         all: Array<TableItem>;
     }>
 >;
-export type DefinedTableItem = TableItem & {
+export type DefinedTableItem = Omit<TableItem, "background"> & {
     week: number;
     serial: number;
 };

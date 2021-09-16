@@ -8,7 +8,7 @@
             </view>
         </view>
         <view class="a-hr hr"></view>
-        <view v-for="(row, rowIndex) in tables" :key="rowIndex">
+        <view v-for="(row, rowIndex) in buildTables" :key="rowIndex">
             <view class="a-flex">
                 <view
                     v-for="(column, columnIndex) in row"
@@ -50,7 +50,7 @@
                     </view>
                     <view class="a-flex-space-between">
                         <view>教室</view>
-                        <view>{{ item.classroom }}</view>
+                        <view>{{ item.classRoom }}</view>
                     </view>
                     <view class="a-flex-space-between">
                         <view>讲师</view>
@@ -112,7 +112,7 @@ export default class CTimeTableBody extends Vue {
         const tables = this.buildEmptyArray();
         this.table.forEach(v => {
             const rowIndex: number = v.serial - 1;
-            const columnIndex: number = rowIndex - 1;
+            const columnIndex: number = v.week - 1;
             const namePathNumber: number = Number(
                 Array.prototype.reduce.call(v.className, (pre, cur) => pre + cur.charCodeAt(0), 0)
             );
@@ -136,7 +136,7 @@ export default class CTimeTableBody extends Vue {
 
     buildDateRow(): void {
         const today = safeDate();
-        const curWeek = safeDate(this.week);
+        const curWeek = safeDate(this.start);
         const previousWeekend = addDate(curWeek, 0, 0, this.week * 7 - 8);
         const weekDay = [];
         for (let i = 0; i < 7; ++i) {
@@ -205,7 +205,7 @@ export default class CTimeTableBody extends Vue {
 }
 
 .dialog {
-    color: $a-font-gray;
-    width: 400px;
+    color: $a-font-grey;
+    width: 200px;
 }
 </style>

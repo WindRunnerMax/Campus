@@ -3,7 +3,7 @@
         <view class="y-center a-flex-space-between">
             <view class="y-center">
                 <view class="arrow-left iconfont icon-arrow-lift" @click="switchMonth(0)"></view>
-                <view class="show-date">{{ curYear }}年 {{ curMonth }}月</view>
+                <view class="show-date">{{ year }}年 {{ month }}月</view>
                 <view class="arrow-right iconfont icon-arrow-right" @click="switchMonth(1)"></view>
             </view>
             <view class="y-center">
@@ -58,7 +58,8 @@ export default class CCalendar extends Vue {
     @Prop({ type: Array, default: () => [] })
     vacationDay!: Array<string>;
 
-    curMonth: number = safeDate().getMonth() + 1;
+    year: number = 2021;
+    month: number = safeDate().getMonth() + 1;
     calendar: Calendar = [];
     vacation: { distance: number; start: string } = {
         distance: 0,
@@ -81,7 +82,8 @@ export default class CCalendar extends Vue {
 
     buildCalendar(date: Date): void {
         const todayStr = formatDate();
-        this.curMonth = date.getMonth() + 1;
+        this.year = date.getFullYear();
+        this.month = date.getMonth() + 1;
         const calendar: Calendar = new Array(6).fill(void 0).map(() =>
             new Array(8).fill(void 0).map(() => ({
                 day: "",
@@ -113,7 +115,7 @@ export default class CCalendar extends Vue {
                 item.day = formatDate("dd", start);
                 const startStr = formatDate("yyyy-MM-dd", start);
                 const weekDay = start.getDay();
-                if (start.getMonth() + 1 === this.curMonth) {
+                if (start.getMonth() + 1 === this.month) {
                     item.type.currentMonth = true;
                 }
                 if (1 <= weekDay && weekDay <= 5 && curWeekSerial < this.vacationWeek) {
@@ -146,6 +148,14 @@ export default class CCalendar extends Vue {
             })
         );
         this.calendar = calendar;
+    }
+
+    switchMonth(type: number) {
+        this.buildCalendar(addDate(safeDate(this.year, this.month), 0, type === 0 ? -1 : 1));
+    }
+
+    jumpDate(date: string) {
+        this.buildCalendar(safeDate(date));
     }
 }
 </script>
