@@ -67,7 +67,7 @@
 import { Component, Vue, Prop, Watch } from "vue-property-decorator";
 import { addDate, formatDate, safeDate } from "../utils/datetime";
 import { DefinedTableItem, TableItem, Tables } from "./types";
-import CDialog from "../c-dialog/c-dialog.vue";
+import CDialog from "../dialog/dialog.vue";
 const TABLE_CONFIG = {
     ROW: 5,
     COLUMN: 7,
@@ -79,22 +79,13 @@ const WEEK_DAY = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
     components: { CDialog },
 })
 export default class CTimeTableBody extends Vue {
-    @Prop({
-        type: Array,
-        required: true,
-    })
+    @Prop({ type: Array, required: true })
     table!: Array<DefinedTableItem>;
 
-    @Prop({
-        type: Number,
-        required: true,
-    })
+    @Prop({ type: Number, required: true })
     week!: number;
 
-    @Prop({
-        type: String,
-        required: true,
-    })
+    @Prop({ type: String, required: true })
     start!: number;
 
     dateRow: Array<{ w: string; d: string; c: string }> = new Array(7).fill(void 0).map((_, i) => ({

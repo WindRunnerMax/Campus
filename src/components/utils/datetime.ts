@@ -5,6 +5,7 @@ export function safeDate(): Date;
 export function safeDate(date: Date): Date;
 export function safeDate(timestamp: number): Date;
 export function safeDate(dateTimeStr: string): Date;
+export function safeDate(compatible: number | string | Date): Date;
 export function safeDate(
     year: number,
     month: number,
@@ -80,8 +81,8 @@ export const addDate = (date: Date, years = 0, months = 0, days = 0): Date => {
  * 精确的时间差
  */
 export const timeDiff = (
-    startDateString: string,
-    endDateString: string
+    startDateString: string | number | Date,
+    endDateString: string | number | Date
 ): {
     days: number;
     hours: number;

@@ -23,29 +23,15 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component
 export default class CCard extends Vue {
-    @Prop({
-        type: String,
-    })
+    @Prop({ type: String })
     title!: string;
-    @Prop({
-        type: String,
-        default: "#79B2F9",
-    })
+    @Prop({ type: String, default: "#79B2F9" })
     color!: string;
-    @Prop({
-        type: Boolean,
-        default: null,
-    })
+    @Prop({ type: Boolean, default: null })
     topSpace!: boolean;
-    @Prop({
-        type: Boolean,
-        default: false,
-    })
+    @Prop({ type: Boolean, default: false })
     inheritColor!: boolean;
-    @Prop({
-        type: [String, Number],
-        default: "",
-    })
+    @Prop({ type: [String, Number], default: "" })
     titleHeight!: string | number;
 
     get cardColor() {
