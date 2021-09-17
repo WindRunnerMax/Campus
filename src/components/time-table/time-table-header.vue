@@ -1,7 +1,7 @@
 <template>
-    <view class="y-center status-con a-flex-space-between">
-        <view class="a-text-center">第{{ week }}周</view>
-        <view class="y-center">
+    <view class="a-y-center status-con a-flex-space-between a-pt">
+        <view class="a-lml a-mt">第{{ week }}周</view>
+        <view class="a-y-center">
             <view class="a-btn a-btn-white a-btn-mini refresh" @tap="$emit('refresh')">
                 <view class="iconfont icon-shuaxin1"></view>
             </view>
@@ -26,10 +26,6 @@ export default class CTimeTableHeader extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/asse.css";
-@import "../styles/asse.scss";
-@import "../styles/iconfont.css";
-
 .container {
     padding: 5px;
     height: 30px;

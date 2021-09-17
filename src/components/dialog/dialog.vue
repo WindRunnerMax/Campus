@@ -3,7 +3,7 @@
         <view class="container" @click="close">
             <view class="member" @click.stop>
                 <slot></slot>
-                <view class="close x-center y-center" @click="close">
+                <view class="close a-x-center a-y-center" @click="close">
                     <i class="iconfont icon-x"></i>
                 </view>
             </view>
@@ -27,9 +27,7 @@ export default class CDialog extends Vue {
 </script>
 
 <style scoped lang="scss">
-@import "../styles/asse.css";
 @import "../styles/asse.scss";
-@import "../styles/iconfont.css";
 
 @keyframes arise {
     0% {

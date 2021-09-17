@@ -1,7 +1,8 @@
 <template>
     <view>
         <c-card title="课表">
-            <c-time-table-header :week="10"></c-time-table-header>
+            <c-time-table-header :week="week"></c-time-table-header>
+            <view class="a-hr"></view>
             <c-time-table-body :start="start" :week="week" :table="table"></c-time-table-body>
         </c-card>
     </view>
@@ -13,7 +14,6 @@ import CCard from "@/components/card/card.vue";
 import CTimeTableHeader from "@/components/time-table/time-table-header.vue";
 import CTimeTableBody from "@/components/time-table/time-table-body.vue";
 import { DefinedTableItem } from "@/components/time-table/types";
-
 @Component({
     components: { CTimeTableHeader, CTimeTableBody, CCard },
 })

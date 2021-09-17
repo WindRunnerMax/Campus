@@ -161,9 +161,7 @@ export default class CCalendar extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/asse.css";
 @import "../styles/asse.scss";
-@import "../styles/iconfont.css";
 
 .show-date {
     margin: 10px 20px;

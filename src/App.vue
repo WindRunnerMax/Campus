@@ -15,6 +15,6 @@ export default Vue.extend({
 
 <style lang="scss">
 @import "@/components/styles/asse.css";
-@import "@/components/styles/asse.scss";
 @import "@/components/styles/iconfont.css";
+@import "@/components/styles/asse-style.scss";
 </style>

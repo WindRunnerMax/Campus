@@ -14,7 +14,7 @@
                     v-for="(column, columnIndex) in row"
                     :key="columnIndex"
                     class="a-full"
-                    @click="showDetail(column)"
+                    @click="column.single && showDetail(column.all)"
                 >
                     <view
                         v-if="column.single"
@@ -41,19 +41,25 @@
                 <view
                     v-for="(item, index) in dialog.content"
                     :key="index"
-                    class="a-mt-5 a-mb-5"
+                    class="a-mt-10 a-mb-10"
                     :class="{ 'a-lmt': index }"
                 >
-                    <view class="y-center">
+                    <view class="a-y-center">
                         <view class="a-dot" :style="{ 'background': item.background }"></view>
-                        <view>{{ item.name }}</view>
+                        <view>{{ item.className }}</view>
                     </view>
-                    <view class="a-flex-space-between">
-                        <view>教室</view>
+                    <view class="a-flex-space-between a-mt">
+                        <view class="a-y-center">
+                            <view class="a-dot a-background-grey"></view>
+                            <view>教室</view>
+                        </view>
                         <view>{{ item.classRoom }}</view>
                     </view>
-                    <view class="a-flex-space-between">
-                        <view>讲师</view>
+                    <view class="a-flex-space-between a-mt">
+                        <view class="a-y-center">
+                            <view class="a-dot a-background-grey"></view>
+                            <view>讲师</view>
+                        </view>
                         <view>{{ item.teacher }}</view>
                     </view>
                 </view>
@@ -135,16 +141,17 @@ export default class CTimeTableBody extends Vue {
     }
 
     buildDateRow(): void {
-        const today = safeDate();
+        const todayStr = formatDate("MM/dd", safeDate());
         const curWeek = safeDate(this.start);
         const previousWeekend = addDate(curWeek, 0, 0, this.week * 7 - 8);
         const weekDay = [];
         for (let i = 0; i < 7; ++i) {
             const addedDate = addDate(previousWeekend, 0, 0, i);
+            const addedDateStr = formatDate("MM/dd", addedDate);
             weekDay.push({
                 w: WEEK_DAY[i],
-                d: formatDate("MM/dd", addedDate),
-                c: addedDate.getDay() === today.getDay() ? "week-unit--today" : "",
+                d: addedDateStr,
+                c: addedDateStr === todayStr ? "week-unit--today" : "",
             });
         }
         this.dateRow = weekDay;
@@ -158,9 +165,7 @@ export default class CTimeTableBody extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/asse.css";
 @import "../styles/asse.scss";
-@import "../styles/iconfont.css";
 
 .a-hr {
     margin: 3px 0;
@@ -206,6 +211,6 @@ export default class CTimeTableBody extends Vue {
 
 .dialog {
     color: $a-font-grey;
-    width: 200px;
+    width: 300px;
 }
 </style>

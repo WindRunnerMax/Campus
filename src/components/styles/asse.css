@@ -114,7 +114,7 @@ page {
 	font-size: 10px;
 }
 
-.a-btn-cicle {
+.a-btn-circle {
 	border-radius: 50px;
 }
 
@@ -321,7 +321,7 @@ page {
     cursor: pointer;
 }
 
-.a-verline {
+.a-ver-line {
 	width: 2px;
 	margin: 2px 5px;
 	background-color: var(--color-blue);
