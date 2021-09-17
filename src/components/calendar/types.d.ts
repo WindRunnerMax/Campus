@@ -13,4 +13,4 @@ export interface DateTime {
     };
 }
 
-export type Calendar = Array<Array<DateTime>>;
+export type Calendar = Array<Array<DateTime | Record<string, never>>>;

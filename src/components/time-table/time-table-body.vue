@@ -4,7 +4,9 @@
         <view class="a-flex">
             <view v-for="(item, index) in dateRow" :key="index" class="week-unit">
                 <view class="week-unit--item">{{ item.w }}</view>
-                <view class="week-unit--item" :class="item.c">{{ item.d ? item.d : "00/00" }}</view>
+                <view class="week-unit--item week-unit--default" :class="item.c">
+                    {{ item.d ? item.d : "00/00" }}
+                </view>
             </view>
         </view>
         <view class="a-hr hr"></view>
@@ -183,8 +185,12 @@ export default class CTimeTableBody extends Vue {
     font-size: 8px;
 }
 
+.week-unit--default {
+    border-bottom: 3px solid #fff;
+}
+
 .week-unit--today {
-    border-bottom: 3px solid #eee;
+    border-color: #eee;
 }
 
 .table-unit {
