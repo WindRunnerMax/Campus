@@ -145,7 +145,7 @@ export default class CTimeTableBody extends Vue {
     buildDateRow(): void {
         const todayStr = formatDate("MM/dd", safeDate());
         const curWeek = safeDate(this.start);
-        const previousWeekend = addDate(curWeek, 0, 0, this.week * 7 - 8);
+        const previousWeekend = addDate(curWeek, 0, 0, this.week * 7 - 7);
         const weekDay = [];
         for (let i = 0; i < 7; ++i) {
             const addedDate = addDate(previousWeekend, 0, 0, i);
