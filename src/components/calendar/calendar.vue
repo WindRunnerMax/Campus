@@ -1,36 +1,59 @@
 <template>
     <view>
-        <view class="y-center a-flex-space-between">
-            <view class="y-center">
+        <view class="a-y-center a-flex-space-between">
+            <view class="a-y-center a-mt">
                 <view class="arrow-left iconfont icon-arrow-lift" @click="switchMonth(0)"></view>
                 <view class="show-date">{{ year }}年 {{ month }}月</view>
                 <view class="arrow-right iconfont icon-arrow-right" @click="switchMonth(1)"></view>
             </view>
-            <view class="y-center">
-                <view class="opt y-center x-center a-background-orange" @click="jumpDate(today)">
+            <view class="a-y-center">
+                <view class="opt a-y-center a-x-center a-background-blue" @click="jumpDate(today)">
                     今
                 </view>
-                <view class="opt y-center x-center a-background-blue" @click="jumpDate(termStart)">
+                <view
+                    class="opt a-y-center a-x-center a-background-orange"
+                    @click="jumpDate(termStart)"
+                >
                     开
                 </view>
                 <view
-                    class="opt y-center x-center a-background-green"
-                    @click="jumpDate(vacationStartDate)"
+                    class="opt a-y-center a-x-center a-background-green"
+                    @click="jumpDate(vacation.start)"
                 >
                     假
                 </view>
             </view>
         </view>
         <view>
-            <view class="y-center line">
-                <view v-for="(item, index) in weekDay" :key="index" class="unit">
+            <view class="a-y-center a-flex-space-around a-lmt a-lmb">
+                <view
+                    v-for="(item, index) in weekDay"
+                    :key="index"
+                    class="a-x-center a-y-center unit"
+                >
                     {{ item }}
                 </view>
             </view>
-            <view v-for="(row, rowIndex) in calendar" :key="rowIndex" class="line">
+            <view
+                v-for="(row, rowIndex) in calendar"
+                :key="rowIndex"
+                class="a-y-center a-flex-space-around a-lmt a-lmb"
+            >
                 <view v-for="(column, columnIndex) in row" :key="columnIndex">
-                    <view class="">
-                        <view class="">{{ column.day }}</view>
+                    <view
+                        class="a-text-center"
+                        :class="{
+                            'type--purple': column.type.flag,
+                            'type--green': column.type.vacation || column.type.weekend,
+                            'type--black': column.type.work,
+                            'type--today': column.type.today,
+                            'type--vacation-start': column.type.vacationStart,
+                            'type--term-start': column.type.termStart,
+                            'type--not-cur-month': !column.type.currentMonth && !column.type.flag,
+                        }"
+                    >
+                        <view class="unit day">{{ column.day }}</view>
+                        <view class="tips">{{ column.type | filterTips }}</view>
                     </view>
                 </view>
             </view>
@@ -39,11 +62,21 @@
 </template>
 
 <script lang="ts">
-import { Calendar } from "./types";
+import { Calendar, CalendarItem } from "./types";
 import { Component, Vue, Prop } from "vue-property-decorator";
 import { addDate, formatDate, safeDate, timeDiff } from "../utils/datetime";
 
-@Component
+@Component({
+    filters: {
+        filterTips: (type: CalendarItem["type"]): string => {
+            if (type.flag) return "周次";
+            else if (type.vacation) return "假期";
+            else if (type.weekend) return "周末";
+            else if (type.work) return "教学";
+            return "--";
+        },
+    },
+})
 export default class CCalendar extends Vue {
     @Prop({ type: String, required: true })
     term!: string;
@@ -80,11 +113,8 @@ export default class CCalendar extends Vue {
         this.vacation.distance = timeDiff(safeDate(), vacationStartDate).days;
     }
 
-    buildCalendar(date: Date): void {
-        const todayStr = formatDate();
-        this.year = date.getFullYear();
-        this.month = date.getMonth() + 1;
-        const calendar: Calendar = new Array(6).fill(void 0).map(() =>
+    getEmptyCalendar(): Calendar {
+        return new Array(6).fill(void 0).map(() =>
             new Array(8).fill(void 0).map(() => ({
                 day: "",
                 type: {
@@ -99,43 +129,43 @@ export default class CCalendar extends Vue {
                 },
             }))
         );
+    }
+
+    buildCalendar(date: Date): void {
+        const todayStr = formatDate();
+        this.year = date.getFullYear();
+        this.month = date.getMonth() + 1;
+        const calendar: Calendar = this.getEmptyCalendar();
         const monthFirstDay = safeDate(date.getFullYear(), date.getMonth());
         const goBackDays = -(monthFirstDay.getDay() === 0 ? 7 : monthFirstDay.getDay());
         let start = addDate(monthFirstDay, 0, 0, goBackDays);
         calendar.forEach(row =>
             row.forEach((item, index) => {
                 const curWeekSerial: number =
-                    Math.floor(timeDiff(safeDate(this.termStart), start).days / 7) + 1;
+                    Math.floor((timeDiff(safeDate(this.termStart), start, true).days + 1) / 7) + 1;
                 if (index === 0) {
                     item.type.flag = true;
-                    item.day = curWeekSerial.toString();
+                    item.day = curWeekSerial > 0 ? curWeekSerial.toString() : "0";
                     return void 0;
                 }
-                start = addDate(monthFirstDay, 0, 0, 1);
-                item.day = formatDate("dd", start);
+                start = addDate(start, 0, 0, 1);
                 const startStr = formatDate("yyyy-MM-dd", start);
                 const weekDay = start.getDay();
-                if (start.getMonth() + 1 === this.month) {
-                    item.type.currentMonth = true;
-                }
-                if (1 <= weekDay && weekDay <= 5 && curWeekSerial < this.vacationWeek) {
-                    item.type.work = true;
-                }
-                if (weekDay === 0 || weekDay === 6) {
-                    item.type.weekend = true;
-                }
-                if (todayStr === startStr) {
-                    item.type.today = true;
-                }
-                if (this.termStart === startStr) {
-                    item.type.termStart = true;
-                }
-                if (this.vacation.start === startStr) {
-                    item.type.vacationStart = true;
-                }
-                if (this.vacationWeek <= curWeekSerial && curWeekSerial <= this.weekCount) {
-                    item.type.vacation = true;
-                }
+                item.day = formatDate("dd", start);
+                item.type = {
+                    today: todayStr === startStr,
+                    flag: false,
+                    work:
+                        1 <= weekDay &&
+                        weekDay <= 5 &&
+                        curWeekSerial < this.vacationWeek &&
+                        curWeekSerial > 0,
+                    weekend: weekDay === 0 || weekDay === 6,
+                    vacation: this.vacationWeek <= curWeekSerial && curWeekSerial <= this.weekCount,
+                    currentMonth: start.getMonth() + 1 === this.month,
+                    vacationStart: this.vacation.start === startStr,
+                    termStart: this.termStart === startStr,
+                };
                 if (this.workDay.indexOf(startStr) !== -1) {
                     item.type.work = true;
                     item.type.vacation = false;
@@ -151,7 +181,7 @@ export default class CCalendar extends Vue {
     }
 
     switchMonth(type: number) {
-        this.buildCalendar(addDate(safeDate(this.year, this.month), 0, type === 0 ? -1 : 1));
+        this.buildCalendar(addDate(safeDate(this.year, this.month - 1), 0, type === 0 ? -1 : 1));
     }
 
     jumpDate(date: string) {
@@ -176,5 +206,51 @@ export default class CCalendar extends Vue {
     color: #fff;
     background-color: $a-type-primary;
     border-radius: 30px;
+}
+
+.unit {
+    line-height: 25px;
+    width: 25px;
+    margin: 2.5px;
+}
+
+.tips {
+    color: #999;
+    font-size: 11px;
+}
+
+.type--today > .day {
+    background: $a-blue;
+}
+
+.type--term-start > .day {
+    background: $a-orange;
+}
+
+.type--vacation-start > .day {
+    background: $a-green;
+}
+
+.type--today > .day,
+.type--term-start > .day,
+.type--vacation-start > .day {
+    overflow: hidden;
+    border-radius: 30px;
+    color: #fff !important;
+}
+
+.type--purple,
+.type--purple > .tips {
+    color: $a-type-primary;
+}
+
+.type--green,
+.type--green > .tips {
+    color: $a-type-success;
+}
+
+.type--not-cur-month,
+.type--not-cur-month > .tips {
+    color: #ddd !important;
 }
 </style>

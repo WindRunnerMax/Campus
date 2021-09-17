@@ -32,7 +32,7 @@ export function safeDate(
         return new Date(p1);
     } else if (typeof p1 === "number" && typeof p2 === "number") {
         // 第一和第二个参数都为`Number`
-        return new Date(p1, p2, p3, p4, p5, p6, p7);
+        return new Date(p1, p2, p3 || 1, p4 || 0, p5 || 0, p6 || 0, p7 || 0);
     } else if (typeof p1 === "string") {
         // 第一个参数为`String`
         return new Date(p1.replace(/-/g, "/"));
@@ -82,7 +82,8 @@ export const addDate = (date: Date, years = 0, months = 0, days = 0): Date => {
  */
 export const timeDiff = (
     startDateString: string | number | Date,
-    endDateString: string | number | Date
+    endDateString: string | number | Date,
+    abs = false
 ): {
     days: number;
     hours: number;
@@ -91,11 +92,17 @@ export const timeDiff = (
 } => {
     const oldDate = safeDate(startDateString);
     const newDate = safeDate(endDateString);
+    const sign = abs ? (newDate.getTime() - oldDate.getTime() > 0 ? 1 : -1) : 1;
     const diffTime = Math.abs(newDate.getTime() - oldDate.getTime()) / 1000; // 转为秒
     const days = Math.floor(diffTime / 86400);
     const hours = Math.floor(diffTime / 3600) - 24 * days;
     const minutes = Math.floor((diffTime % 3600) / 60);
     const seconds = Math.floor(diffTime % 60);
-    return { days, hours, minutes, seconds };
+    return {
+        days: days * sign,
+        hours: hours * sign,
+        minutes: minutes * sign,
+        seconds: seconds * sign,
+    };
 };
 export default { safeDate, formatDate, addDate, timeDiff };

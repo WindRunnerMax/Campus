@@ -1,4 +1,4 @@
-export interface DateTime {
+export interface CalendarItem {
     day: string;
     type: {
         today: boolean;
@@ -13,4 +13,4 @@ export interface DateTime {
     };
 }
 
-export type Calendar = Array<Array<DateTime | Record<string, never>>>;
+export type Calendar = Array<Array<CalendarItem>>;
