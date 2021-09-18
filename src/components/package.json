@@ -1,0 +1,19 @@
+{
+    "name": "shst-campus",
+    "version": "1.0.0",
+    "description": "shst campus",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/WindrunnerMax/Campus"
+    },
+    "scripts": {},
+    "author": "Czy",
+    "license": "MIT",
+    "dependencies": {
+        "vue": "^2.6.11",
+        "vue-class-component": "^6.3.2",
+        "vue-property-decorator": "^8.0.0"
+    },
+    "devDependencies": {}
+  }
+  
