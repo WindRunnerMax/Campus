@@ -1,7 +1,7 @@
 {
-  "name": "shst",
-  "version": "0.1.0",
-  "private": true,
+  "name": "@shst-campus",
+  "version": "1.0.0",
+  "main": "index.js",
   "scripts": {
     "serve": "npm run dev:h5",
     "build": "npm run build:h5",
