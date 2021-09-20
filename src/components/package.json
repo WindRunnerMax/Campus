@@ -1,6 +1,7 @@
 {
-    "name": "@shst/campus-components",
-    "version": "1.0.1",
+    "name": "shst-campus-components",
+    "version": "1.0.2",
+    "private": false,
     "description": "shst campus-components",
     "repository": {
       "type": "git",

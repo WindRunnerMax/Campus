@@ -3,7 +3,7 @@
 将版本库依赖加入`uniapp-cli`构建的`TS`模板项目，例如`https://github.com/SHST-SDUST/SHST-UNI`。
 
 ```shell
-$ yarn add shst-campus
+$ yarn add shst-campus-components
 ```
 
 配置`vue.config.js`与`tsconfig.json`。
@@ -11,12 +11,12 @@ $ yarn add shst-campus
 // vue.config.js
 const path = require("path");
 module.exports = {
-  transpileDependencies: ["shst-campus"],
+  transpileDependencies: ["shst-campus-components"],
     configureWebpack: {
         resolve: {
             alias: {
                 "@": path.join(__dirname, "./src"),
-                "@shst-campus": path.join(__dirname, "./node_modules/shst-campus"),
+                "@campus": path.join(__dirname, "./node_modules/shst-campus-components"),
             },
         },
     },
@@ -32,8 +32,8 @@ module.exports = {
       "@/*": [
         "./src/*"
       ],
-      "@shst-campus/*": [
-        "./node_modules/shst-campus/*"
+      "@campus/*": [
+        "./node_modules/shst-campus-components/*"
       ]
     },
     // ...
@@ -44,6 +44,6 @@ module.exports = {
 
 ```javascript
 // ...
-import CCard from "@shst-campus/c-card/c-card.vue"
+import CCard from "@campus/c-card/c-card.vue";
 // ...
 ```
