@@ -11,6 +11,7 @@ $ yarn add shst-campus
 // vue.config.js
 const path = require("path");
 module.exports = {
+  transpileDependencies: ["shst-campus"],
     configureWebpack: {
         resolve: {
             alias: {
