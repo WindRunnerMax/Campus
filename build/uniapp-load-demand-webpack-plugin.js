@@ -1,4 +1,4 @@
-class UniappLoadDemandWebpackPlugin {
+export class UniappLoadDemandWebpackPlugin {
     constructor(options) {
         this.options = options || {};
     }

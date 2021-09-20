@@ -1,13 +1,11 @@
-// const { getOptions } = require("loader-utils");
 const transform = str => str.replace(/\B([A-Z])/g, "-$1").toLowerCase();
 module.exports = function (source) {
-    // console.log(getOptions(this));
-    // console.log(this.query.name);
     const name = this.query.name;
     if (!name) return source;
     const path = this.query.path || "lib";
     const main = this.query.main;
     return source.replace(
+        // maybe use parse-imports to parse import statement
         new RegExp(
             `import[\\s]*?\\{[\\s]*?([\\s\\S]*?)[\\s]*?\\}[\\s]*?from[\\s]*?['"]${name}['"];?`,
             "g"
@@ -29,7 +27,7 @@ module.exports = function (source) {
 /*
 // vue.config.js
 module.exports = {
-    transpileDependencies: ["@shst/campus"],
+    transpileDependencies: ["shst-campus"],
     configureWebpack: {
         resolve: {
             alias: {
@@ -40,9 +38,9 @@ module.exports = {
             rules: [
                 {
                     test: /\.vue$/,
-                    loader: "@shst/campus/build/components-loader",
+                    loader: "shst-campus/build/components-loader",
                     options: {
-                        name: "@shst/campus",
+                        name: "shst-campus",
                         path: "src/components",
                         main: "index",
                     },
