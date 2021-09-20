@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import CCard from "@/components/card/card.vue";
+import CCard from "@/components/c-card/c-card.vue";
 import CTimeTableHeader from "@/components/c-time-table-header/c-time-table-header.vue";
 import CTimeTableBody from "@/components/c-time-table-body/c-time-table-body.vue";
 import { DefinedTableItem } from "@/components/types/time-table";

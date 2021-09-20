@@ -1,7 +1,7 @@
 {
-    "name": "shst-campus",
+    "name": "@shst/campus-components",
     "version": "1.0.1",
-    "description": "shst campus",
+    "description": "shst campus-components",
     "repository": {
       "type": "git",
       "url": "https://github.com/WindrunnerMax/Campus"
