@@ -74,8 +74,8 @@
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from "vue-property-decorator";
 import { addDate, formatDate, safeDate } from "../utils/datetime";
-import { DefinedTableItem, TableItem, Tables } from "./types";
-import CDialog from "../dialog/dialog.vue";
+import { DefinedTableItem, TableItem, Tables } from "../types/time-table";
+import CDialog from "../c-dialog/c-dialog.vue";
 const TABLE_CONFIG = {
     ROW: 5,
     COLUMN: 7,

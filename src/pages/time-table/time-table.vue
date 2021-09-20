@@ -11,9 +11,9 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import CCard from "@/components/card/card.vue";
-import CTimeTableHeader from "@/components/time-table/time-table-header.vue";
-import CTimeTableBody from "@/components/time-table/time-table-body.vue";
-import { DefinedTableItem } from "@/components/time-table/types";
+import CTimeTableHeader from "@/components/c-time-table-header/c-time-table-header.vue";
+import CTimeTableBody from "@/components/c-time-table-body/c-time-table-body.vue";
+import { DefinedTableItem } from "@/components/types/time-table";
 
 @Component({
     components: { CTimeTableHeader, CTimeTableBody, CCard },

@@ -15,8 +15,8 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import CCard from "@/components/card/card.vue";
-import CCalendar from "@/components/calendar/calendar.vue";
+import CCard from "@/components/c-card/c-card.vue";
+import CCalendar from "@/components/c-calendar/c-calendar.vue";
 
 @Component({
     components: { CCard, CCalendar },

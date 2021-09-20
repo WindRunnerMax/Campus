@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts">
-import { Calendar, CalendarItem } from "./types";
+import { Calendar, CalendarItem } from "../types/calendar";
 import { Component, Vue, Prop } from "vue-property-decorator";
 import { addDate, formatDate, safeDate, timeDiff } from "../utils/datetime";
 

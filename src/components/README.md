@@ -44,6 +44,6 @@ module.exports = {
 
 ```javascript
 // ...
-import CCard from "@shst-campus/card/card.vue"
+import CCard from "@shst-campus/c-card/c-card.vue"
 // ...
 ```
