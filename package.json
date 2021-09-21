@@ -1,7 +1,9 @@
 {
   "name": "shst-campus",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "index.js",
+  "description": "shst campus",
+  "keywords": ["campus", "components"],
   "scripts": {
     "serve": "npm run dev:h5",
     "build": "npm run build:h5",
@@ -39,7 +41,9 @@
     "test:h5": "cross-env UNI_PLATFORM=h5 jest -i",
     "test:ios": "cross-env UNI_PLATFORM=app-plus UNI_OS_NAME=ios jest -i",
     "test:mp-baidu": "cross-env UNI_PLATFORM=mp-baidu jest -i",
-    "test:mp-weixin": "cross-env UNI_PLATFORM=mp-weixin jest -i"
+    "test:mp-weixin": "cross-env UNI_PLATFORM=mp-weixin jest -i",
+    "build:package": "node ./build/index.js",
+    "build:publish": "node ./build/index.js & cd dist/package & npm publish"
   },
   "dependencies": {
     "@dcloudio/uni-app-plus": "^2.0.0-32220210818002",

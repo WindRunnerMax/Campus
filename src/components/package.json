@@ -2,6 +2,7 @@
     "name": "shst-campus-components",
     "version": "1.0.2",
     "private": false,
+    "keywords": ["campus", "components"],
     "description": "shst campus-components",
     "repository": {
       "type": "git",
