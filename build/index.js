@@ -28,14 +28,21 @@ const start = async dir => {
     }
 
     console.log("processing index.js");
-    let content = "";
+    let indexContent = "";
     components.forEach(item => {
-        content += `import ${item.componentName} from "./lib/${item.fileName}/${item.fileName}.vue";\n`;
+        indexContent += `import ${item.componentName} from "./lib/${item.fileName}/${item.fileName}.vue";\n`;
     });
     const exportItems = components.map(v => v.componentName).join(", ");
-    content += `export { ${exportItems} };\n`;
-    content += `export default { ${exportItems} };\n`;
-    await writeFile(path.join(target, "/index.js"), content);
+    indexContent += `export { ${exportItems} };\n`;
+    indexContent += `export default { ${exportItems} };\n`;
+    await writeFile(path.join(target, "/index.js"), indexContent);
+
+    console.log("processing index.d.ts");
+    let dtsContent = `import { Component } from "vue";\n\n`;
+    components.forEach(item => {
+        dtsContent += `declare const ${item.componentName}: Component;\n`;
+    });
+    await writeFile(path.join(target, "/index.d.ts"), dtsContent);
 
     console.log("processing .npmrc");
     const exist = await fileExist(path.join(target, "/.npmrc"));
