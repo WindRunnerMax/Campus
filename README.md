@@ -36,7 +36,7 @@ $ yarn add sass-loader@10.1.1 -D
 
 之后是天坑环节，在之前发布`npm`包的时候就有很多坑，可以参考上边的博客。这次的坑是，使用按需引入的方式，即类似于`import { CCard } from "shst-campus";`这种形式，如果在本地`src`中写页面使用的是装饰器的写法的话，是不能正常编译`node_modules`里的组件的，无论`node_modules`里的组件是`TS`还是普通`vue`组件都会出现这样的情况，这个问题在上边写的博客里写了这就是个大坑，即编译出来的产物是没有`css`文件以及`js`文件只有一个`Component({})`，如果使用的是`Vue.extend`的写法的话，又是能够正常编译`node_modules`里的组件，当然本地`src`编写的组件如果没有使用`TS`的话是没有问题的，所以现在是有三种解决方案，其实终极大招是写一个`webpack loader`，这个我在博客中实现过，考虑到通用性才最终没使用，要是实在顶不住了就完善一下直接上`loader`，至于为什么要写`loader`而不只是写一个`plugin`也可以看看博客，天坑。
 * `src`中组件使用装饰器写法，引入组件使用真实路径，即类似于`import CCard from "shst-campus/lib/c-card/c-card.vue";`。
-* `src`中组件使用`Vue.extend`写法，可以使用按需，引入即类似于`import { CCard } from "shst-campus";`。
+* `src`中组件使用`Vue.extend`写法，可以使用按需引入，即类似于`import { CCard } from "shst-campus";`。
 * `src`中组件使用这两种写法都可以，然后配置一下`uniapp`提供的`easycom`能力，之后可以直接使用组件不需要声明。
 
 如果需要配置组件的按需引入，即类似于`import { CCard } from "shst-campus";`这种形式，需要修改`babel.config.js`文件。
