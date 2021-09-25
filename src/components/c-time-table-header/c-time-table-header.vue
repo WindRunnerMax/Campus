@@ -21,7 +21,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 @Component
 export default class CTimeTableHeader extends Vue {
     @Prop({ type: Number, required: true, validator: v => v > 0 })
-    week!: number;
+    public week!: number;
 }
 </script>
 

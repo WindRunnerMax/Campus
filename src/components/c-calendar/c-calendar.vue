@@ -58,6 +58,31 @@
                 </view>
             </view>
         </view>
+        <view class="a-hr a-mt-20 a-mb-15"></view>
+        <view class="a-y-center">
+            <view
+                v-for="(item, index) in termTips"
+                :key="index"
+                class="a-y-center"
+                :style="'width:' + item.width + '%'"
+            >
+                <view class="a-dot" :style="'background:' + item.background"></view>
+                <view class="a-color-grey">{{ item.name }}:{{ item.tips }}</view>
+            </view>
+        </view>
+        <view class="a-pt-6 a-pb-6"></view>
+        <view class="a-y-center">
+            <view
+                v-for="(item, index) in vacationTips"
+                :key="index"
+                class="a-y-center"
+                :style="'width:' + item.width + '%'"
+            >
+                <view class="a-dot" :style="'background:' + item.background"></view>
+                <view class="a-color-grey">{{ item.name }}:{{ item.tips }}</view>
+            </view>
+        </view>
+        <view class="a-hr a-mt-15"></view>
     </view>
 </template>
 
@@ -91,18 +116,30 @@ export default class CCalendar extends Vue {
     @Prop({ type: Array, default: () => [] })
     vacationDay!: Array<string>;
 
-    year: number = 2021;
-    month: number = safeDate().getMonth() + 1;
-    calendar: Calendar = [];
-    vacation: { distance: number; start: string } = {
+    public year: number = 2021;
+    public month: number = safeDate().getMonth() + 1;
+    public calendar: Calendar = [];
+    public vacation: { distance: number; start: string } = {
         distance: 0,
         start: "",
     };
-    weekDay: Array<string> = ["周", "一", "二", "三", "四", "五", "六", "日"];
+    public weekDay: Array<string> = ["周", "一", "二", "三", "四", "五", "六", "日"];
+    public termTips: Array<{ width: string; name: string; tips: string; background: string }> = [
+        { width: "40", name: "学期", tips: "...", background: "#3CB371" },
+        { width: "24", name: "周次", tips: "...", background: "#9F8BEC" },
+        { width: "36", name: "开学", tips: "...", background: "#FF6347" },
+    ];
+    public vacationTips: Array<{ width: string; name: string; tips: string; background: string }> =
+        [
+            { width: "40", name: "假期", tips: "...", background: "#3CB371" },
+            { width: "24", name: "周次", tips: "...", background: "#9F8BEC" },
+            { width: "36", name: "距假期", tips: "...", background: "#FF6347" },
+        ];
 
     created() {
         this.buildVacationInfo();
         this.buildCalendar(safeDate());
+        this.buildTips();
     }
 
     buildVacationInfo(): void {
@@ -110,7 +147,24 @@ export default class CCalendar extends Vue {
         const vacationDate = addDate(termStartData, 0, 0, (this.vacationWeek - 1) * 7);
         const vacationStartDate = formatDate("yyyy-MM-dd", vacationDate);
         this.vacation.start = vacationStartDate;
-        this.vacation.distance = timeDiff(safeDate(), vacationStartDate).days;
+        this.vacation.distance = timeDiff(safeDate(), vacationStartDate).days + 1;
+    }
+
+    buildTips(): void {
+        const termTipsData: Array<string> = [this.term, this.weekCount.toString(), this.termStart];
+        this.termTips = this.termTips.map((item, index) => ({
+            ...item,
+            tips: termTipsData[index],
+        }));
+        const vacationTipsData: Array<string> = [
+            this.vacation.start,
+            this.vacationWeek.toString(),
+            this.vacation.distance.toString() + "天",
+        ];
+        this.vacationTips = this.vacationTips.map((item, index) => ({
+            ...item,
+            tips: vacationTipsData[index],
+        }));
     }
 
     getEmptyCalendar(): Calendar {

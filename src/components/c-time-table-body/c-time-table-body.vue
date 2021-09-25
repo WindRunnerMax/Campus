@@ -96,13 +96,15 @@ export default class CTimeTableBody extends Vue {
     @Prop({ type: String, required: true })
     start!: number;
 
-    dateRow: Array<{ w: string; d: string; c: string }> = new Array(7).fill(void 0).map((_, i) => ({
-        w: WEEK_DAY[i],
-        d: "00/00",
-        c: "",
-    }));
+    public dateRow: Array<{ w: string; d: string; c: string }> = new Array(7)
+        .fill(void 0)
+        .map((_, i) => ({
+            w: WEEK_DAY[i],
+            d: "00/00",
+            c: "",
+        }));
 
-    dialog: { show: boolean; content: Array<TableItem> } = {
+    public dialog: { show: boolean; content: Array<TableItem> } = {
         show: false,
         content: [],
     };
