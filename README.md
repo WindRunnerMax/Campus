@@ -78,7 +78,7 @@ process.UNI_LIBRARIES.forEach(libraryName => {
 近来事情不多所以重写了之前提到的`loader`，如果使用按需加载的方式上边都可以忽略，只需要安装好依赖并且在`vue.config.js`中配置好就可以了，可以参考`https://github.com/SHST-SDUST/SHST-UNI/`。
 
 ```shell
-$ yarn add uniapp-import-loader
+$ yarn add -D uniapp-import-loader
 ```
 
 ```javascript
