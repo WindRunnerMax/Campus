@@ -3,13 +3,13 @@
         <view class="a-lml a-mt">第{{ week }}周</view>
         <view class="a-y-center">
             <view class="a-btn a-btn-white a-btn-mini refresh" @click="$emit('refresh')">
-                <view class="iconfont icon-shuaxin1"></view>
+                <view class="c-iconfont icon-shuaxin1"></view>
             </view>
             <view class="a-btn a-btn-white a-btn-mini pre" @click="$emit('previous')">
-                <view class="iconfont icon-arrow-lift"></view>
+                <view class="c-iconfont icon-arrow-lift"></view>
             </view>
             <view class="a-btn a-btn-white a-btn-mini next" @click="$emit('next')">
-                <view class="iconfont icon-arrow-right"></view>
+                <view class="c-iconfont icon-arrow-right"></view>
             </view>
         </view>
     </view>
