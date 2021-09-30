@@ -1,4 +1,8 @@
 export interface SubItem {
+    id?: number;
+    width?: number;
+    height?: number;
+    iconPath?: string;
     name: string;
     latitude: string;
     longitude: string;
@@ -9,8 +13,22 @@ export interface SubItem {
 
 export interface TabItem {
     name: string;
-    scale: number;
     data: Array<SubItem>;
+}
+
+export interface MarkerImages {
+    life: string;
+    dormitory: string;
+    scenery: string;
+    canteen: string;
+    door: string;
+    building: string;
+    supermarket: string;
+}
+
+export interface InitLocation {
+    latitude: number;
+    longitude: number;
 }
 
 export type TourConfig = Array<TabItem>;

@@ -8,6 +8,10 @@
             <i class="c-iconfont icon-calendar"></i>
             <view>校历</view>
         </navigator>
+        <navigator url="/pages/tour/tour" open-type="navigate">
+            <i class="c-iconfont icon-nav"></i>
+            <view>校园导览</view>
+        </navigator>
     </view>
 </template>
 <script lang="ts">

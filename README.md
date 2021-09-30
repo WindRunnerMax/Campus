@@ -1,5 +1,5 @@
 # Campus
-校园小程序组件库，`uniapp-cli`构建，主要是作为 [山科小站](https://github.com/WindrunnerMax/SHST) 抽离的组件库依赖，请注意安装`ts`和`sass`的依赖，依赖包可以直接参考此版本库根目录下的`package.json`，迁移到`TS`以及处理作为小程序的依赖踩坑等相关信息请参考 (博客编写中...)。
+校园小程序组件库，`uniapp-cli`构建，主要是作为 [山科小站](https://github.com/WindrunnerMax/SHST) 抽离的组件库依赖，请注意安装`ts`和`sass`的依赖，依赖包可以直接参考此版本库根目录下的`package.json`，迁移到`TS`以及处理作为小程序的依赖踩坑等相关信息请参考 [uniapp小程序迁移到TS](https://blog.touchczy.top/#/MiniProgram/uniapp%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%BF%81%E7%A7%BB%E5%88%B0TS)。
 
 ## 安装
 

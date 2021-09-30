@@ -1,153 +1,194 @@
 <template>
     <view>
-        <view>
-            <scroll-view scroll-x="true">
-                <view class="top-switch a-text-center" v-if="!fullScreen">
-                    <label
-                        v-for="(item, index) in buildData"
-                        :key="index"
-                        :id="index"
-                        @click="changePage"
-                        class="top-switch-btn a-x-full"
-                        :class="{ 'active': isSelectedBuildType === index }"
-                    >
-                        {{ item.name }}
-                    </label>
-                </view>
-            </scroll-view>
-            <map
-                :longitude="longitude"
-                :latitude="latitude"
-                :scale="buildData[isSelectedBuildType].scale"
-                :markers="buildData[isSelectedBuildType].data"
-                @markertap="markerTap"
-                :include-points="buildData[isSelectedBuildType].data"
-                show-location
-                enable-overlooking
-                enable-3D
-                :style="{ width: 'auto', height: fullScreen ? 94 + 'vh' : 48 + 'vh' }"
+        <view
+            class="a-flex a-text-center a-background-blue tab-container a-lpt a-fontsize-13"
+            v-if="!fullScreen"
+        >
+            <view
+                v-for="(item, index) in schoolMap"
+                :key="index"
+                @click="switchTab(index)"
+                class="a-flex-full tab-item"
+                :class="{ 'tab-active': activeTab === index }"
             >
-                <cover-view class="controls" :class="{ full: fullScreen }">
-                    <cover-view @click="navigateSearch">
-                        <cover-image class="img" src="/static/camptour/search.png" />
-                    </cover-view>
-                    <cover-view @click="location">
-                        <cover-image class="img" src="/static/camptour/location.png" />
-                    </cover-view>
-                </cover-view>
-            </map>
-            <view @click="clickButton">
-                共有{{ buildData[isSelectedBuildType].data.length }}个景观 ◕‿◕
+                {{ item.name }}
             </view>
-            <scroll-view
-                scroll-y
-                :style="{ height: fullScreen ? 0 : 40 + 'vh' }"
-                :scroll-top="(isSelectedBuild - 1) * 70"
+        </view>
+        <map
+            class="map-container"
+            :longitude="location.longitude"
+            :latitude="location.latitude"
+            :markers="schoolMap[activeTab].data"
+            @markertap="markerTap"
+            :include-points="schoolMap[activeTab].data"
+            show-location
+            enable-overlooking
+            enable-3D
+            show-compass
+            :style="{ width: 'auto', height: fullScreen ? 93 + 'vh' : 50 + 'vh' }"
+        >
+            <view class="map-buttons" :class="{ fullScreen }">
+                <view @click="$emit('nav-search')">
+                    <view class="c-iconfont icon-search" />
+                </view>
+                <view @click="locateCurrentPosition" class="a-lmt">
+                    <view class="c-iconfont icon-location" />
+                </view>
+            </view>
+        </map>
+        <view
+            @click="fullScreen = !fullScreen"
+            class="a-text-center a-background-grey a-fontsize-13 a-pt a-pb"
+        >
+            共有{{ schoolMap[activeTab].data.length }}个景观 ◕‿◕
+        </view>
+        <scroll-view
+            scroll-y
+            :style="{ height: fullScreen ? 0 : 40 + 'vh' }"
+            :scroll-top="selectedBuildId * 70"
+        >
+            <view
+                v-for="(item, index) in schoolMap[activeTab].data"
+                :key="index"
+                class="a-y-center building-item a-color-grey a-flex-space-between"
+                :style="{ 'background-color': selectedBuildId == index ? '#d5d5d5' : '' }"
             >
                 <view
-                    v-for="(item, index) in buildData[isSelectedBuildType].data"
-                    :key="index"
-                    class="building-item"
-                    :style="{ 'background-color': isSelectedBuild - 1 == index ? '#d5d5d5' : '' }"
+                    @click="$emit('nav-detail', '?tid=' + activeTab + '&bid=' + index)"
+                    class="a-y-center"
                 >
-                    <view class="img-view">
-                        <navigator
-                            class="img"
-                            :url="'details?tid=' + isSelectedBuildType + '&bid=' + index"
-                        >
-                            <image :src="item.img[0]" mode="aspectFill"></image>
-                            <view class="item">
-                                <view class="item-name">{{ item.name }}</view>
-                                <view class="item-floor" v-if="item.floor">
-                                    位置：{{ item.floor }}
-                                </view>
-                            </view>
-                        </navigator>
-                        <navigator
-                            class="text"
-                            :url="
-                                'polyline?latitude=' +
-                                item.latitude +
-                                '&longitude=' +
-                                item.longitude
-                            "
-                        >
-                            <image src="/static/camptour/location.svg"></image>
-                        </navigator>
+                    <image
+                        :src="item.img[0]"
+                        mode="aspectFill"
+                        class="building-image a-lmr"
+                    ></image>
+                    <view class="item">
+                        <view class="item-name">{{ item.name }}</view>
                     </view>
                 </view>
-            </scroll-view>
-        </view>
+                <view
+                    @click="
+                        $emit(
+                            'nav-route',
+                            '?latitude=' + item.latitude + '&longitude=' + item.longitude
+                        )
+                    "
+                >
+                    <view class="c-iconfont icon-location"></view>
+                </view>
+            </view>
+        </scroll-view>
     </view>
 </template>
 
-<script>
-import school from "@/vector/resources/camptour/sdust";
-export default {
-    data: () => ({
-        fullScreen: false,
-        latitude: 35.9994,
-        longitude: 120.12487,
-        buildData: {},
-        windowHeight: "",
-        windowWidth: "",
-        isSelectedBuild: 0,
-        isSelectedBuildType: 0,
-    }),
-    created: function () {
+<script lang="ts">
+import { Component, Vue, Prop } from "vue-property-decorator";
+import { TourConfig, MarkerImages, InitLocation } from "../types/tour";
+
+@Component
+export default class CTour extends Vue {
+    @Prop({ required: true, type: Array })
+    public config!: TourConfig;
+    @Prop({ required: true, type: Object })
+    public images!: MarkerImages;
+    @Prop({ required: true, type: Object })
+    public initLocation!: InitLocation;
+
+    public fullScreen: boolean = false;
+    public location: InitLocation = {
+        latitude: 36.006,
+        longitude: 120.12187,
+    };
+    public activeTab = 0;
+    public selectedBuildId = -1;
+    public schoolMap: TourConfig = this.buildSchoolMap();
+
+    public created() {
+        this.location = this.initLocation;
         uni.showShareMenu({ withShareTicket: true });
-        uni.getSystemInfo({
+    }
+
+    private buildSchoolMap(): TourConfig {
+        return this.config.map(tabItem => ({
+            ...tabItem,
+            data: tabItem.data.map((dataItem, dataIndex) => ({
+                ...dataItem,
+                id: dataIndex,
+                width: dataItem.width ? dataItem.width : 30,
+                height: dataItem.height ? dataItem.height : 30,
+                iconPath: dataItem.iconPath ? dataItem.iconPath : this.images[dataItem.icon],
+            })),
+        }));
+    }
+
+    public switchTab(index: number): void {
+        this.activeTab = index;
+        this.selectedBuildId = -1;
+        this.location = this.initLocation;
+    }
+
+    public markerTap(e: { markerId: number }) {
+        this.selectedBuildId = e.markerId;
+    }
+
+    public locateCurrentPosition(): void {
+        uni.getLocation({
+            type: "wgs84", // 默认为 wgs84 返回 gps 坐标，gcj02 返回可用于 uni.openLocation 的坐标
             success: res => {
-                //获取当前设备宽度与高度，用于定位控键的位置
-                this.windowHeight = res.windowHeight;
-                this.windowWidth = res.windowWidth;
+                this.location = {
+                    latitude: res.latitude,
+                    longitude: res.longitude,
+                };
             },
         });
-        this.loadSchoolConf();
-        this.buildData = uni.$app.data.tmp.map;
-        this.location();
-    },
-    destroyed: function () {
-        uni.$app.data.tmp.map = null;
-    },
-    methods: {
-        loadSchoolConf: function () {
-            uni.$app.data.tmp.map = school.map;
-            for (let i = 0; i < uni.$app.data.tmp.map.length; i++) {
-                for (let b = 0; b < uni.$app.data.tmp.map[i].data.length; b++) {
-                    uni.$app.data.tmp.map[i].data[b].id = b + 1;
-                }
-            }
-        },
-        regionchange: function () {},
-        markerTap: function (e) {
-            this.isSelectedBuild = e.markerId;
-        },
-        navigateSearch: function () {
-            uni.navigateTo({ url: "search" });
-        },
-        location: function () {
-            uni.getLocation({
-                type: "wgs84", // 默认为 wgs84 返回 gps 坐标，gcj02 返回可用于 uni.openLocation 的坐标
-                success: res => {
-                    uni.$app.data.tmp.latitude = res.latitude;
-                    uni.$app.data.tmp.longitude = res.longitude;
-                    uni.$app.data.tmp.islocation = true;
-                    this.longitude = res.longitude;
-                    this.latitude = res.latitude;
-                },
-            });
-        },
-        clickButton: function () {
-            this.fullScreen = !this.fullScreen;
-        },
-        changePage: function (event) {
-            this.isSelectedBuildType = event.currentTarget.id;
-            this.isSelectedBuild = 0;
-        },
-        onShareAppMessage: function () {},
-    },
-};
+    }
+
+    public onShareAppMessage() {}
+}
 </script>
 
-<style></style>
+<style lang="scss">
+@import "../styles/asse.scss";
+
+.tab-container {
+    height: 40px;
+}
+.tab-item {
+    height: 30px;
+    color: #fff;
+    font-size: 26rpx;
+}
+
+.tab-active {
+    border-bottom: 3px solid white;
+}
+
+.building-image {
+    width: 80px;
+    height: 50px;
+}
+
+.building-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.map-container {
+    position: relative;
+}
+
+.map-buttons {
+    position: absolute;
+    top: 65%;
+    left: 86%;
+}
+
+.icon-search,
+.icon-location {
+    font-size: 20px;
+    padding: 13px;
+    border-radius: 50px;
+    background: $a-blue;
+    color: #fff;
+}
+</style>

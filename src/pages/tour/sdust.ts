@@ -3,7 +3,6 @@ import { TourConfig } from "@/components/types/tour";
 const map: TourConfig = [
     {
         name: "景点",
-        scale: 16,
         data: [
             {
                 name: "花海",
@@ -106,7 +105,6 @@ const map: TourConfig = [
     },
     {
         name: "教学楼",
-        scale: 16,
         data: [
             {
                 name: "J1教学楼",
@@ -246,7 +244,6 @@ const map: TourConfig = [
         ],
     },
     {
-        scale: 16,
         name: "校门",
         data: [
             {
@@ -268,7 +265,6 @@ const map: TourConfig = [
         ],
     },
     {
-        scale: 16,
         name: "餐厅超市",
         data: [
             {
@@ -323,7 +319,6 @@ const map: TourConfig = [
     },
     {
         name: "宿舍楼",
-        scale: 16,
         data: [
             {
                 name: "B1-3",
@@ -560,7 +555,6 @@ const map: TourConfig = [
         ],
     },
     {
-        scale: 16,
         name: "生活",
         data: [
             {

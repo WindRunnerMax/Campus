@@ -8,6 +8,13 @@
         },
         {
             "path": "pages/calendar/calendar"
+        },
+        {
+            "path": "pages/tour/tour",
+            "style": {
+                "navigationBarBackgroundColor": "#4C98F7",
+                "navigationBarTextStyle": "#fff"
+            }
         }
     ],
     "globalStyle": {
