@@ -3,7 +3,7 @@
         <view class="a-lml a-mt">第{{ week }}周</view>
         <view class="a-y-center">
             <view class="a-btn a-btn-white a-btn-mini refresh" @click="$emit('refresh')">
-                <view class="c-iconfont icon-shuaxin1"></view>
+                <view class="c-iconfont icon-refresh"></view>
             </view>
             <view class="a-btn a-btn-white a-btn-mini pre" @click="$emit('previous')">
                 <view class="c-iconfont icon-arrow-lift"></view>

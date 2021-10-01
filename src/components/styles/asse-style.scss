@@ -39,7 +39,7 @@
 /* section --- 文字大小 --- section */
 
 /* section --- 内外边距 --- section */
-$size-list: 3,5,6,10,15,20;
+$size-list: 3,5,6,8,10,15,20;
 @each $item in $size-list{
     @each $short, $long in l left, t top, r right, b bottom {
     	.a-m#{$short}-#{$item} {

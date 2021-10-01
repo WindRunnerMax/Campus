@@ -5,7 +5,7 @@
             v-if="!fullScreen"
         >
             <view
-                v-for="(item, index) in schoolMap"
+                v-for="(item, index) in map"
                 :key="index"
                 @click="switchTab(index)"
                 class="a-flex-full tab-item"
@@ -18,9 +18,9 @@
             class="map-container"
             :longitude="location.longitude"
             :latitude="location.latitude"
-            :markers="schoolMap[activeTab].data"
+            :markers="map[activeTab].data"
             @markertap="markerTap"
-            :include-points="schoolMap[activeTab].data"
+            :include-points="map[activeTab].data"
             show-location
             enable-overlooking
             enable-3D
@@ -40,7 +40,7 @@
             @click="fullScreen = !fullScreen"
             class="a-text-center a-background-grey a-fontsize-13 a-pt a-pb"
         >
-            共有{{ schoolMap[activeTab].data.length }}个景观 ◕‿◕
+            共有{{ map[activeTab].data.length }}个景观 ◕‿◕
         </view>
         <scroll-view
             scroll-y
@@ -48,13 +48,13 @@
             :scroll-top="selectedBuildId * 70"
         >
             <view
-                v-for="(item, index) in schoolMap[activeTab].data"
+                v-for="(item, index) in map[activeTab].data"
                 :key="index"
                 class="a-y-center building-item a-color-grey a-flex-space-between"
                 :style="{ 'background-color': selectedBuildId == index ? '#d5d5d5' : '' }"
             >
                 <view
-                    @click="$emit('nav-detail', '?tid=' + activeTab + '&bid=' + index)"
+                    @click="$emit('nav-detail', '?t-index=' + activeTab + '&d-index=' + index)"
                     class="a-y-center"
                 >
                     <image
@@ -88,7 +88,7 @@ import { TourConfig, MarkerImages, InitLocation } from "../types/tour";
 @Component
 export default class CTour extends Vue {
     @Prop({ required: true, type: Array })
-    public config!: TourConfig;
+    public schoolMap!: TourConfig;
     @Prop({ required: true, type: Object })
     public images!: MarkerImages;
     @Prop({ required: true, type: Object })
@@ -101,15 +101,15 @@ export default class CTour extends Vue {
     };
     public activeTab = 0;
     public selectedBuildId = -1;
-    public schoolMap: TourConfig = this.buildSchoolMap();
+    public map: TourConfig = this.buildMap();
 
     public created() {
         this.location = this.initLocation;
         uni.showShareMenu({ withShareTicket: true });
     }
 
-    private buildSchoolMap(): TourConfig {
-        return this.config.map(tabItem => ({
+    private buildMap(): TourConfig {
+        return this.schoolMap.map(tabItem => ({
             ...tabItem,
             data: tabItem.data.map((dataItem, dataIndex) => ({
                 ...dataItem,

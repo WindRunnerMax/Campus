@@ -15,6 +15,13 @@
                 "navigationBarBackgroundColor": "#4C98F7",
                 "navigationBarTextStyle": "#fff"
             }
+        },
+        {
+            "path": "pages/tour/search",
+            "style": {
+                "navigationBarBackgroundColor": "#4C98F7",
+                "navigationBarTextStyle": "#fff"
+            }
         }
     ],
     "globalStyle": {

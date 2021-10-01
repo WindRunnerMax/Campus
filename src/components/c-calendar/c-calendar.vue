@@ -2,9 +2,12 @@
     <view>
         <view class="a-y-center a-flex-space-between">
             <view class="a-y-center a-mt">
-                <view class="arrow-left iconfont icon-arrow-lift" @click="switchMonth(0)"></view>
+                <view class="arrow-left c-iconfont icon-arrow-lift" @click="switchMonth(0)"></view>
                 <view class="show-date">{{ year }}年 {{ month }}月</view>
-                <view class="arrow-right iconfont icon-arrow-right" @click="switchMonth(1)"></view>
+                <view
+                    class="arrow-right c-iconfont icon-arrow-right"
+                    @click="switchMonth(1)"
+                ></view>
             </view>
             <view class="a-y-center">
                 <view class="opt a-y-center a-x-center a-background-blue" @click="jumpDate(today)">
@@ -70,7 +73,7 @@
                 <view class="a-color-grey">{{ item.name }}:{{ item.tips }}</view>
             </view>
         </view>
-        <view class="a-pt-6 a-pb-6"></view>
+        <view class="a-pt-5 a-pb-5"></view>
         <view class="a-y-center">
             <view
                 v-for="(item, index) in vacationTips"

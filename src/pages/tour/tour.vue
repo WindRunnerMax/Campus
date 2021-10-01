@@ -1,5 +1,10 @@
 <template>
-    <CTour :config="map" :images="imagesPath" :init-location="initLocation"></CTour>
+    <CTour
+        :school-map="map"
+        :images="imagesPath"
+        :init-location="initLocation"
+        @nav-search="navSearch"
+    ></CTour>
 </template>
 
 <script lang="ts">
@@ -26,6 +31,10 @@ export default class Tour extends Vue {
         latitude: 36.003,
         longitude: 120.1239,
     };
+
+    public navSearch(): void {
+        uni.navigateTo({ url: "./search" });
+    }
 }
 </script>
 
