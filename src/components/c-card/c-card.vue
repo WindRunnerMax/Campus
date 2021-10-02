@@ -34,11 +34,11 @@ export default class CCard extends Vue {
     @Prop({ type: [String, Number], default: "" })
     titleHeight!: string | number;
 
-    get cardColor() {
+    get cardColor(): string {
         return this.inheritColor ? this.color : "unset";
     }
 
-    get showTopSpace() {
+    get showTopSpace(): boolean {
         return this.topSpace === null ? !!this.title : !this.topSpace;
     }
 }

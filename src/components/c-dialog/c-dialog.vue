@@ -4,7 +4,7 @@
             <view class="member" @click.stop>
                 <slot></slot>
                 <view class="close a-x-center a-y-center" @click="close">
-                    <i class="iconfont icon-x"></i>
+                    <i class="c-iconfont icon-x"></i>
                 </view>
             </view>
         </view>

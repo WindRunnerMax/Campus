@@ -26,6 +26,11 @@ export interface MarkerImages {
     supermarket: string;
 }
 
+export interface RouteMarkerImages {
+    start: string;
+    end: string;
+}
+
 export interface InitLocation {
     latitude: number;
     longitude: number;

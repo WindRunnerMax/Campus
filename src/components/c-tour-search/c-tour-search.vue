@@ -4,9 +4,9 @@
             <icon class="a-ml a-mr-6" type="search" size="16" color="blue" />
             <input
                 class="a-flex-full"
-                @input="bindInputText"
                 :value="searchText"
                 placeholder="请输入景点名称关键词"
+                @input="bindInputText"
             />
             <icon class="a-ml a-mr" type="cancel" size="16" color="purple" @click="reset" />
         </view>
@@ -14,18 +14,16 @@
             v-for="(item, index) in result"
             :key="index"
             class="a-y-center building-item a-color-grey a-flex-space-between"
+            @click="$emit('nav-detail', '?tIndex=' + item.tabIndex + '&dIndex=' + item.dataIndex)"
         >
-            <view
-                @click="$emit('nav-detail', '?t-index=' + item.tabIndex + '&d-index=' + dataIndex)"
-                class="a-y-center"
-            >
+            <view class="a-y-center">
                 <image :src="item.img[0]" mode="aspectFill" class="building-image a-lmr"></image>
                 <view class="item">
                     <view class="item-name">{{ item.name }}</view>
                 </view>
             </view>
             <view
-                @click="
+                @click.stop="
                     $emit(
                         'nav-route',
                         '?latitude=' + item.latitude + '&longitude=' + item.longitude
@@ -35,7 +33,7 @@
                 <view class="c-iconfont icon-location"></view>
             </view>
         </view>
-        <view class="a-text-center a-color-grey" v-if="searchText && result.length === 0">
+        <view v-if="searchText && result.length === 0" class="a-text-center a-color-grey">
             啊哦~ 什么都没有找到
         </view>
     </view>
@@ -54,7 +52,7 @@ export default class CTourSearch extends Vue {
     public schoolMap!: TourConfig;
 
     public result: Array<ExtendSubItem> = [];
-    public searchText: string = "";
+    public searchText = "";
 
     bindInputText(event: { detail: { value: string } }): void {
         debounce(500, () => {

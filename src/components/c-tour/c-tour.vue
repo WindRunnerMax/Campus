@@ -1,15 +1,15 @@
 <template>
-    <view>
+    <view class="component">
         <view
-            class="a-flex a-text-center a-background-blue tab-container a-lpt a-fontsize-13"
             v-if="!fullScreen"
+            class="a-flex a-text-center a-background-blue tab-container a-lpt a-fontsize-13"
         >
             <view
                 v-for="(item, index) in map"
                 :key="index"
-                @click="switchTab(index)"
                 class="a-flex-full tab-item"
                 :class="{ 'tab-active': activeTab === index }"
+                @click="switchTab(index)"
             >
                 {{ item.name }}
             </view>
@@ -19,26 +19,26 @@
             :longitude="location.longitude"
             :latitude="location.latitude"
             :markers="map[activeTab].data"
-            @markertap="markerTap"
             :include-points="map[activeTab].data"
             show-location
             enable-overlooking
             enable-3D
             show-compass
             :style="{ width: 'auto', height: fullScreen ? 93 + 'vh' : 50 + 'vh' }"
+            @markertap="markerTap"
         >
             <view class="map-buttons" :class="{ fullScreen }">
                 <view @click="$emit('nav-search')">
                     <view class="c-iconfont icon-search" />
                 </view>
-                <view @click="locateCurrentPosition" class="a-lmt">
+                <view class="a-lmt" @click="locateCurrentPosition">
                     <view class="c-iconfont icon-location" />
                 </view>
             </view>
         </map>
         <view
-            @click="fullScreen = !fullScreen"
             class="a-text-center a-background-grey a-fontsize-13 a-pt a-pb"
+            @click="fullScreen = !fullScreen"
         >
             共有{{ map[activeTab].data.length }}个景观 ◕‿◕
         </view>
@@ -52,11 +52,9 @@
                 :key="index"
                 class="a-y-center building-item a-color-grey a-flex-space-between"
                 :style="{ 'background-color': selectedBuildId == index ? '#d5d5d5' : '' }"
+                @click="$emit('nav-detail', '?tIndex=' + activeTab + '&dIndex=' + index)"
             >
-                <view
-                    @click="$emit('nav-detail', '?t-index=' + activeTab + '&d-index=' + index)"
-                    class="a-y-center"
-                >
+                <view class="a-y-center">
                     <image
                         :src="item.img[0]"
                         mode="aspectFill"
@@ -67,7 +65,7 @@
                     </view>
                 </view>
                 <view
-                    @click="
+                    @click.stop="
                         $emit(
                             'nav-route',
                             '?latitude=' + item.latitude + '&longitude=' + item.longitude
@@ -94,7 +92,7 @@ export default class CTour extends Vue {
     @Prop({ required: true, type: Object })
     public initLocation!: InitLocation;
 
-    public fullScreen: boolean = false;
+    public fullScreen = false;
     public location: InitLocation = {
         latitude: 36.006,
         longitude: 120.12187,
@@ -103,7 +101,7 @@ export default class CTour extends Vue {
     public selectedBuildId = -1;
     public map: TourConfig = this.buildMap();
 
-    public created() {
+    created(): void {
         this.location = this.initLocation;
         uni.showShareMenu({ withShareTicket: true });
     }
@@ -127,7 +125,7 @@ export default class CTour extends Vue {
         this.location = this.initLocation;
     }
 
-    public markerTap(e: { markerId: number }) {
+    public markerTap(e: { markerId: number }): void {
         this.selectedBuildId = e.markerId;
     }
 
@@ -143,7 +141,8 @@ export default class CTour extends Vue {
         });
     }
 
-    public onShareAppMessage() {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    public onShareAppMessage(): void {}
 }
 </script>
 

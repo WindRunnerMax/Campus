@@ -1,138 +1,164 @@
 <template>
     <view>
         <map
-            id="navi-map"
-            :longitude="longitude"
-            :latitude="latitude"
+            :longitude="location.longitude"
+            :latitude="location.latitude"
             scale="14"
             :markers="markers"
-            :polyline="polyline"
+            :polyline="polyLines"
             :include-points="markers"
-            class="navi-map"
+            class="route-map"
             show-location
             enable-overlooking="true"
             enable-3D="true"
+            show-compass
         >
-            <cover-view class="distance">{{ distance }}</cover-view>
+            <view class="distance a-color-white a-background-blue">{{ distance }}</view>
         </map>
     </view>
 </template>
 
-<script>
-import amapFile from "@/utils/amap-wx";
-import config from "@/vector/resources/camptour/config";
-export default {
-    data: () => ({
-        latitude: null,
-        longitude: null,
-        markers: [],
-        distance: "",
-        polyline: [],
-    }),
-    onLoad: async function (options) {
-        if (!uni.$app.data.tmp.islocation) {
-            const [, choice] = await uni.showModal({
-                title: "提示",
-                content:
-                    "本功能需要您的位置信息，请检查是否给予微信以及小程序定位权限，点击确定进入小程序授权页设置",
-            });
-            if (choice.confirm) {
-                const [, res] = await uni.openSetting({});
-                if (res.authSetting["scope.userLocation"] === true) {
-                    uni.getLocation({
-                        type: "wgs84",
-                        success: function (res) {
-                            uni.$app.data.tmp.latitude = res.latitude;
-                            uni.$app.data.tmp.longitude = res.longitude;
-                            uni.$app.data.tmp.islocation = true;
-                        },
-                    });
-                }
-                uni.navigateBack();
-            }
+<script lang="ts">
+import { Component, Vue, Prop, Watch } from "vue-property-decorator";
+import { RouteMarkerImages } from "../types/tour";
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const AMap: any = require("../sdk/amap-wx");
+
+interface Location {
+    latitude: number;
+    longitude: number;
+}
+
+@Component
+export default class CTourRoute extends Vue {
+    @Prop({ required: true, type: Object })
+    public images!: RouteMarkerImages;
+    @Prop({ required: true, type: String })
+    public mapKey!: string;
+    @Prop({ required: true, type: Object })
+    public targetLocation!: Location;
+
+    public location: Location = {
+        latitude: 0,
+        longitude: 0,
+    };
+
+    public markers: Array<{
+        id: number;
+        width: string;
+        height: string;
+        iconPath: string;
+        latitude: number;
+        longitude: number;
+    }> = [];
+
+    public distance = "loading...";
+
+    public polyLines: Array<{
+        points: Array<Location>;
+        color: string;
+        width: number;
+    }> = [];
+
+    @Watch("targetLocation")
+    onTargetLocation(): void {
+        if (this.location.latitude && this.location.longitude) {
+            this.routing(this.targetLocation);
         }
+    }
+
+    public created(): void {
         uni.getLocation({
             type: "wgs84",
             success: res => {
-                this.latitude = res.latitude;
-                this.longitude = res.longitude;
-                this.routing(options);
+                this.location.latitude = res.latitude;
+                this.location.longitude = res.longitude;
+                if (this.targetLocation.latitude && this.targetLocation.longitude) {
+                    this.routing(this.targetLocation);
+                }
+            },
+            fail: () => {
+                uni.showToast({
+                    title: "定位失败，无法完成路径规划，请检查定位功能是否开启或小程序定位是否授权",
+                });
             },
         });
-    },
-    methods: {
-        routing: function (options) {
-            const distance =
-                Math.abs(this.longitude - options.longitude) +
-                Math.abs(this.latitude - options.latitude);
-            console.log(distance);
-            const myAmapFun = new amapFile.AMapWX({
-                key: config.key,
-            });
-            const routeData = {
-                origin: options.longitude + "," + options.latitude,
-                destination: this.longitude + "," + this.latitude,
-                success: data => {
-                    const points = [];
-                    if (data.paths && data.paths[0] && data.paths[0].steps) {
-                        const steps = data.paths[0].steps;
-                        for (let i = 0; i < steps.length; i++) {
-                            const poLen = steps[i].polyline.split(";");
-                            for (let j = 0; j < poLen.length; j++) {
-                                points.push({
-                                    longitude: parseFloat(poLen[j].split(",")[0]),
-                                    latitude: parseFloat(poLen[j].split(",")[1]),
-                                });
-                            }
+    }
+
+    private routing(location: Location): void {
+        const distance =
+            Math.abs(this.location.longitude - location.longitude) +
+            Math.abs(this.location.latitude - location.latitude);
+        const routing: any = new AMap.AMapWX({ key: this.mapKey });
+        const routeingConfig = {
+            origin: this.location.longitude + "," + this.location.latitude,
+            destination: location.longitude + "," + location.latitude,
+            success: (data: {
+                paths: Array<{ distance: string; steps: Array<{ polyline: string }> }>;
+            }) => {
+                const points: Array<Location> = [];
+                if (data.paths && data.paths[0] && data.paths[0].steps) {
+                    const steps = data.paths[0].steps;
+                    for (let i = 0; i < steps.length; i++) {
+                        const locations = steps[i].polyline.split(";");
+                        for (let j = 0; j < locations.length; j++) {
+                            points.push({
+                                longitude: parseFloat(locations[j].split(",")[0]),
+                                latitude: parseFloat(locations[j].split(",")[1]),
+                            });
                         }
                     }
-                    this.markers = [
-                        {
-                            width: "25",
-                            height: "35",
-                            iconPath: "/static/camptour/mapicon_end.png",
-                            latitude: options.latitude,
-                            longitude: options.longitude,
-                        },
-                        {
-                            width: "25",
-                            height: "35",
-                            iconPath: "/static/camptour/mapicon_start.png",
-                            latitude: this.latitude,
-                            longitude: this.longitude,
-                        },
-                    ];
-                    this.polyline = [
-                        {
-                            points: points,
-                            color: "#0091ff",
-                            width: 6,
-                        },
-                    ];
-                    if (data.paths[0] && data.paths[0].distance) {
-                        this.distance = data.paths[0].distance + "米";
-                    }
-                },
-                fail: function () {},
-            };
-            if (distance < 0.85) {
-                // getWalkingRoute 步行
-                myAmapFun.getWalkingRoute(routeData);
-            } else {
-                // getDrivingRoute 驾车
-                myAmapFun.getDrivingRoute(routeData);
-            }
-        },
-    },
-};
+                }
+                this.markers = [
+                    {
+                        id: 1,
+                        width: "30",
+                        height: "30",
+                        iconPath: this.images.end,
+                        latitude: location.latitude,
+                        longitude: location.longitude,
+                    },
+                    {
+                        id: 2,
+                        width: "30",
+                        height: "30",
+                        iconPath: this.images.start,
+                        latitude: this.location.latitude,
+                        longitude: this.location.longitude,
+                    },
+                ];
+                this.polyLines = [
+                    {
+                        points: points,
+                        color: "#4C98F7",
+                        width: 6,
+                    },
+                ];
+                if (data.paths[0] && data.paths[0].distance) {
+                    this.distance = data.paths[0].distance + "米";
+                }
+            },
+            fail: () => {
+                uni.showToast({
+                    title: "路径规划失败",
+                });
+            },
+        };
+        console.log(routeingConfig);
+        if (distance < 0.8) {
+            // getWalkingRoute 步行
+            routing.getWalkingRoute(routeingConfig);
+        } else {
+            // getDrivingRoute 驾车
+            routing.getDrivingRoute(routeingConfig);
+        }
+    }
+}
 </script>
 
 <style>
-page {
-    padding: 0;
-}
-
-.navi-map {
+.route-map {
     width: auto;
     height: 100vh;
 }
@@ -143,10 +169,7 @@ page {
     right: 10px;
     height: 30px;
     line-height: 30px;
-    text-align: center;
-    padding: 3px 5px 3px 5px;
-    color: #fff;
-    background: #0091ff;
+    padding: 3px 5px;
     border-radius: 5px;
 }
 </style>

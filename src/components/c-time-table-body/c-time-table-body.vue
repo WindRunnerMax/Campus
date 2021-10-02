@@ -109,7 +109,7 @@ export default class CTimeTableBody extends Vue {
         content: [],
     };
 
-    created() {
+    created(): void {
         this.buildDateRow();
     }
 
@@ -123,7 +123,7 @@ export default class CTimeTableBody extends Vue {
         this.table.forEach(v => {
             const rowIndex: number = v.serial - 1;
             const columnIndex: number = v.week - 1;
-            const namePathNumber: number = Number(
+            const namePathNumber = Number(
                 Array.prototype.reduce.call(v.className, (pre, cur) => pre + cur.charCodeAt(0), 0)
             );
             const single = {

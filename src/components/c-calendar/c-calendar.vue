@@ -119,7 +119,7 @@ export default class CCalendar extends Vue {
     @Prop({ type: Array, default: () => [] })
     vacationDay!: Array<string>;
 
-    public year: number = 2021;
+    public year = 2021;
     public month: number = safeDate().getMonth() + 1;
     public calendar: Calendar = [];
     public vacation: { distance: number; start: string } = {
@@ -139,13 +139,13 @@ export default class CCalendar extends Vue {
             { width: "36", name: "距假期", tips: "...", background: "#FF6347" },
         ];
 
-    created() {
+    created(): void {
         this.buildVacationInfo();
         this.buildCalendar(safeDate());
         this.buildTips();
     }
 
-    buildVacationInfo(): void {
+    private buildVacationInfo(): void {
         const termStartData = safeDate(this.termStart);
         const vacationDate = addDate(termStartData, 0, 0, (this.vacationWeek - 1) * 7);
         const vacationStartDate = formatDate("yyyy-MM-dd", vacationDate);
@@ -153,7 +153,7 @@ export default class CCalendar extends Vue {
         this.vacation.distance = timeDiff(safeDate(), vacationStartDate).days + 1;
     }
 
-    buildTips(): void {
+    private buildTips(): void {
         const termTipsData: Array<string> = [this.term, this.weekCount.toString(), this.termStart];
         this.termTips = this.termTips.map((item, index) => ({
             ...item,
@@ -170,7 +170,7 @@ export default class CCalendar extends Vue {
         }));
     }
 
-    getEmptyCalendar(): Calendar {
+    private getEmptyCalendar(): Calendar {
         return new Array(6).fill(void 0).map(() =>
             new Array(8).fill(void 0).map(() => ({
                 day: "",
@@ -188,7 +188,7 @@ export default class CCalendar extends Vue {
         );
     }
 
-    buildCalendar(date: Date): void {
+    public buildCalendar(date: Date): void {
         const todayStr = formatDate();
         this.year = date.getFullYear();
         this.month = date.getMonth() + 1;
@@ -237,11 +237,11 @@ export default class CCalendar extends Vue {
         this.calendar = calendar;
     }
 
-    switchMonth(type: number) {
+    public switchMonth(type: number): void {
         this.buildCalendar(addDate(safeDate(this.year, this.month - 1), 0, type === 0 ? -1 : 1));
     }
 
-    jumpDate(date: string) {
+    public jumpDate(date: string): void {
         this.buildCalendar(safeDate(date));
     }
 }

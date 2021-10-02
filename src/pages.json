@@ -22,6 +22,20 @@
                 "navigationBarBackgroundColor": "#4C98F7",
                 "navigationBarTextStyle": "#fff"
             }
+        },
+        {
+            "path": "pages/tour/detail",
+            "style": {
+                "navigationBarBackgroundColor": "#4C98F7",
+                "navigationBarTextStyle": "#fff"
+            }
+        },
+        {
+            "path": "pages/tour/route",
+            "style": {
+                "navigationBarBackgroundColor": "#4C98F7",
+                "navigationBarTextStyle": "#fff"
+            }
         }
     ],
     "globalStyle": {

@@ -1,8 +1,12 @@
-// 更详细的配置文档请参考：https://github.com/vuejs/eslint-plugin-vue#gear-configs
-// 不使用@vue/cli创建的话就需要在HBuildX中配置eslint-vue插件
 module.exports = {
     parser: "vue-eslint-parser",
-    extends: ["eslint:recommended", "plugin:vue/base", "plugin:prettier/recommended"],
+    plugins: ["@typescript-eslint"],
+    extends: [
+        "eslint:recommended",
+        "plugin:vue/recommended",
+        "plugin:prettier/recommended",
+        "plugin:@typescript-eslint/recommended",
+    ],
     overrides: [
         {
             files: ["*.ts"],

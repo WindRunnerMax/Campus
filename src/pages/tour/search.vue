@@ -1,5 +1,5 @@
 <template>
-    <CTourSearch :school-map="map"></CTourSearch>
+    <CTourSearch :school-map="map" @nav-detail="navDetail" @nav-route="navRoute"></CTourSearch>
 </template>
 
 <script lang="ts">
@@ -13,6 +13,14 @@ import { TourConfig } from "@/components/types/tour";
 })
 export default class Tour extends Vue {
     public map: TourConfig = map;
+
+    public navDetail(path: string): void {
+        uni.navigateTo({ url: "./detail" + path });
+    }
+
+    public navRoute(path: string): void {
+        uni.navigateTo({ url: "./route" + path });
+    }
 }
 </script>
 

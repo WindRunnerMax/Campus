@@ -4,6 +4,8 @@
         :images="imagesPath"
         :init-location="initLocation"
         @nav-search="navSearch"
+        @nav-detail="navDetail"
+        @nav-route="navRoute"
     ></CTour>
 </template>
 
@@ -34,6 +36,14 @@ export default class Tour extends Vue {
 
     public navSearch(): void {
         uni.navigateTo({ url: "./search" });
+    }
+
+    public navDetail(path: string): void {
+        uni.navigateTo({ url: "./detail" + path });
+    }
+
+    public navRoute(path: string): void {
+        uni.navigateTo({ url: "./route" + path });
     }
 }
 </script>
