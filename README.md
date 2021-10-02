@@ -33,7 +33,6 @@ $ yarn add sass -D
 $ yarn add sass-loader@10.1.1 -D
 ```
 
-
 之后是天坑环节，在之前发布`npm`包的时候就有很多坑，可以参考上边的博客。这次的坑是，使用按需引入的方式，即类似于`import { CCard } from "shst-campus";`这种形式，如果在本地`src`中写页面使用的是装饰器的写法的话，是不能正常编译`node_modules`里的组件的，无论`node_modules`里的组件是`TS`还是普通`vue`组件都会出现这样的情况，这个问题在上边写的博客里写了这就是个大坑，即编译出来的产物是没有`css`文件以及`js`文件只有一个`Component({})`，如果使用的是`Vue.extend`的写法的话，又是能够正常编译`node_modules`里的组件，当然本地`src`编写的组件如果没有使用`TS`的话是没有问题的，所以现在是有三种解决方案，其实终极大招是写一个`webpack loader`，这个我在博客中实现过，考虑到通用性才最终没使用，要是实在顶不住了就完善一下直接上`loader`，至于为什么要写`loader`而不只是写一个`plugin`也可以看看博客，天坑。
 * `src`中组件使用装饰器写法，引入组件使用真实路径，即类似于`import CCard from "shst-campus/lib/c-card/c-card.vue";`。
 * `src`中组件使用`Vue.extend`写法，可以使用按需引入，即类似于`import { CCard } from "shst-campus";`。
@@ -107,6 +106,17 @@ module.exports = {
 };
 ```
 
+最后在`App.vue`中引入相关的`css`即可。
+
+```vue
+<!-- ... -->
+<style lang="scss">
+@import "shst-campus/lib/styles/asse.css";
+@import "shst-campus/lib/styles/iconfont.css";
+@import "shst-campus/lib/styles/asse-style.scss";
+/* ... */
+</style>
+```
 
 ## 课表组件
 
@@ -211,7 +221,6 @@ export default class Calendar extends Vue {
     vacationDay: Array<string> = ["2021-09-20", "2021-09-21"];
 }
 </script>
-
 ```
 
 ### 参数说明
@@ -221,3 +230,211 @@ export default class Calendar extends Vue {
 * `vacationWeek`: 假期开始周次，一定是小于等于`weekCount`的。
 * `workDay`: 调休的工作日，例如`2021-09-18`是周六，中秋假期调休上班。
 * `vacationDay`: 假期，例如`2021-09-20`是周一，`2021-09-21`是周二，中秋假期休息。
+
+## 校园导览组件
+校园导览组件自项目 [school-map](https://github.com/gxgk/school-map) 重写而来，组件的使用需要两步配置，第一步是编写配置文件，可以参考本项目的`src/pages/tour/sdust.ts`，实际上引入`import { TourConfig } from "shst-campus/lib/types/tour"`再根据类型编写即可，第二步是申请高德地图的`key`，用来完成路径规划功能，密钥申请地址`http://lbs.amap.com/api/javascript-api/summary/`，另外须加入`https://restapi.amap.com`为`request`合法域名，再之后就可以按照`src/pages/tour/`文件夹下类似的页面完成功能了。这其中的路由方式比较诡异，因为小程序端写类似这种需要跳转的组件比较难受，使用组件去完成路由体验又比较差，主要体现在返回前一页的，只能使用`emit`到父组件再进行路由了，所以需要多个页面来完成功能。
+
+### 描述
+* 示例: `/pages/tour/tour.vue` 
+
+```vue
+<template>
+    <CTour
+        :school-map="map"
+        :images="imagesPath"
+        :init-location="initLocation"
+        @nav-search="navSearch"
+        @nav-detail="navDetail"
+        @nav-route="navRoute"
+    ></CTour>
+</template>
+
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+import map from "./sdust";
+import CTour from "@/components/c-tour/c-tour.vue";
+import { TourConfig, MarkerImages, InitLocation } from "@/components/types/tour";
+
+@Component({
+    components: { CTour },
+})
+export default class Tour extends Vue {
+    public map: TourConfig = map;
+    public imagesPath: MarkerImages = {
+        life: "/static/tour/life.png",
+        dormitory: "/static/tour/dormitory.png",
+        scenery: "/static/tour/scenery.png",
+        canteen: "/static/tour/canteen.png",
+        door: "/static/tour/door.png",
+        building: "/static/tour/building.png",
+        supermarket: "/static/tour/supermarket.png",
+    };
+    public initLocation: InitLocation = {
+        latitude: 36.003,
+        longitude: 120.1239,
+    };
+
+    public navSearch(): void {
+        uni.navigateTo({ url: "./search" });
+    }
+
+    public navDetail(path: string): void {
+        uni.navigateTo({ url: "./detail" + path });
+    }
+
+    public navRoute(path: string): void {
+        uni.navigateTo({ url: "./route" + path });
+    }
+}
+</script>
+
+<style>
+page {
+    padding: 0;
+}
+</style>
+```
+
+### 参数说明
+* `school-map`: 符合`TourConfig`类型的对象。
+* `images`: 配置显示各种类别的图片绝对路径。
+* `init-location`: 初始加载过程中显示的地址。
+* `@nav-search`: 点击搜索按钮的事件。
+* `@nav-detail`: 点击跳转详情按钮的事件，参数`path`为详情页需要的数据。
+* `@nav-route`: 点击跳转路径规划按钮的事件，参数`path`为路径规划页需要的数据。
+
+### 描述
+* 示例: `/pages/tour/search.vue` 
+
+```vue
+<template>
+    <CTourSearch :school-map="map" @nav-detail="navDetail" @nav-route="navRoute"></CTourSearch>
+</template>
+
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+import map from "./sdust";
+import CTourSearch from "@/components/c-tour-search/c-tour-search.vue";
+import { TourConfig } from "@/components/types/tour";
+
+@Component({
+    components: { CTourSearch },
+})
+export default class Tour extends Vue {
+    public map: TourConfig = map;
+
+    public navDetail(path: string): void {
+        uni.navigateTo({ url: "./detail" + path });
+    }
+
+    public navRoute(path: string): void {
+        uni.navigateTo({ url: "./route" + path });
+    }
+}
+</script>
+
+<style>
+page {
+    padding: 0;
+}
+</style>
+```
+
+### 参数说明
+* `school-map`: 符合`TourConfig`类型的对象。
+* `@nav-detail`: 点击跳转详情按钮的事件，参数`path`为详情页需要的数据。
+* `@nav-route`: 点击跳转路径规划按钮的事件，参数`path`为路径规划页需要的数据。
+
+### 描述
+* 示例: `/pages/tour/detail.vue` 
+
+```vue
+<template>
+    <CTourDetail :detail="detail" @nav-route="navRoute"></CTourDetail>
+</template>
+
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+import map from "./sdust";
+import CTourDetail from "@/components/c-tour-detail/c-tour-detail.vue";
+import { SubItem } from "@/components/types/tour";
+
+@Component({
+    components: { CTourDetail },
+})
+export default class Detail extends Vue {
+    public detail: SubItem | Record<string, never> = {};
+
+    onLoad(options: { tIndex: string; dIndex: string }): void {
+        const tabIndex = parseInt(options.tIndex);
+        const dataIndex = parseInt(options.dIndex);
+        this.detail = map[tabIndex].data[dataIndex];
+    }
+
+    public navRoute(path: string): void {
+        uni.navigateTo({ url: "./route" + path });
+    }
+}
+</script>
+
+<style>
+page {
+    padding: 0;
+}
+</style>
+```
+
+### 参数说明
+* `detail`: 符合`SubItem`类型的对象，是`TourConfig`类型中实际显示的一条数据。
+* `@nav-route`: 点击跳转路径规划按钮的事件，参数`path`为路径规划页需要的数据。
+
+
+### 描述
+* 示例: `/pages/tour/route.vue` 
+
+```vue
+<template>
+    <CTourRoute
+        map-key="填入高德地图开放平台申请的key"
+        :images="imagesPath"
+        :target-location="targetLocation"
+    ></CTourRoute>
+</template>
+
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+import CTourRoute from "@/components/c-tour-route/c-tour-route.vue";
+import { RouteMarkerImages } from "@/components/types/tour";
+
+@Component({
+    components: { CTourRoute },
+})
+export default class Route extends Vue {
+    public imagesPath: RouteMarkerImages = {
+        start: "/static/tour/start.png",
+        end: "/static/tour/end.png",
+    };
+
+    public targetLocation: { latitude: number; longitude: number } | Record<string, never> = {};
+
+    onLoad(options: { latitude: string; longitude: string }): void {
+        this.targetLocation = {
+            latitude: parseFloat(options.latitude),
+            longitude: parseFloat(options.longitude),
+        };
+    }
+}
+</script>
+
+<style>
+page {
+    padding: 0;
+}
+</style>
+
+```
+
+### 参数说明
+* `map-key`: 高德地图开放平台申请的`key`，`http://lbs.amap.com/api/javascript-api/summary/`。
+* `images`: 配置显示各种类别的图片绝对路径。
+* `target-location`: 从`path`中取得的终点地址对象。
