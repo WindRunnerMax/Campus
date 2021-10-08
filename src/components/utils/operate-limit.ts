@@ -1,10 +1,12 @@
+type PossibleParams = string | number | boolean | undefined | null | void | Record<string, unknown>;
+
 /**
  * 防抖
  * 定时器实现 立即防抖
  */
-const debounceGenerator = (): ((wait: number, funct: any, ...args: any[]) => void) => {
+const debounceGenerator = () => {
     let timer: number;
-    return (wait, funct, ...args) => {
+    return <T extends PossibleParams[]>(wait: number, funct: (...args: T) => void, ...args: T) => {
         clearTimeout(timer);
         timer = setTimeout(() => funct(...args), wait);
     };
@@ -12,25 +14,12 @@ const debounceGenerator = (): ((wait: number, funct: any, ...args: any[]) => voi
 export const debounce = debounceGenerator();
 
 /**
-// 防抖
-// 定时器实现 非立即防抖
-function debounceGenerator(){
-    var timer = null;
-    return (wait, funct, ...args) => {
-        if(!timer) funct(...args);
-        clearTimeout(timer);
-        timer = setTimeout(() => timer = null, wait);
-    }
-}
- */
-
-/**
  * 节流
  * 时间戳实现
  */
-const throttleGenerator = (): ((wait: number, funct: any, ...args: any[]) => void) => {
+const throttleGenerator = () => {
     let previous = 0;
-    return (wait, funct, ...args) => {
+    return <T extends PossibleParams[]>(wait: number, funct: (...args: T) => void, ...args: T) => {
         const now = +new Date();
         if (now - previous > wait) {
             funct(...args);
@@ -39,19 +28,5 @@ const throttleGenerator = (): ((wait: number, funct: any, ...args: any[]) => voi
     };
 };
 export const throttle = throttleGenerator();
-
-/*
-// 节流
-// 定时器实现
-function throttleGenerator(){
-    var timer = null;
-    return (wait, funct, ...args) => {
-        if(!timer){
-            funct(...args);
-            timer = setTimeout(() => timer = null, wait);
-        }
-    }
-}
- */
 
 export default { debounce, throttle };
