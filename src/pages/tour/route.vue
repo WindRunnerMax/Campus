@@ -24,8 +24,8 @@ export default class Route extends Vue {
 
     onLoad(options: { latitude: string; longitude: string }): void {
         this.targetLocation = {
-            latitude: parseFloat(options.latitude),
-            longitude: parseFloat(options.longitude),
+            latitude: Number(options.latitude),
+            longitude: Number(options.longitude),
         };
     }
 }

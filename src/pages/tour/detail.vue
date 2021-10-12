@@ -15,8 +15,8 @@ export default class Detail extends Vue {
     public detail: SubItem | Record<string, never> = {};
 
     onLoad(options: { tIndex: string; dIndex: string }): void {
-        const tabIndex = parseInt(options.tIndex);
-        const dataIndex = parseInt(options.dIndex);
+        const tabIndex = Number(options.tIndex);
+        const dataIndex = Number(options.dIndex);
         this.detail = map[tabIndex].data[dataIndex];
     }
 

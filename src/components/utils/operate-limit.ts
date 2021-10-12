@@ -1,25 +1,23 @@
-type PossibleParams = string | number | boolean | undefined | null | void | Record<string, unknown>;
-
 /**
  * 防抖
  * 定时器实现 立即防抖
  */
-const debounceGenerator = () => {
+const debounceFactory = () => {
     let timer: number;
-    return <T extends PossibleParams[]>(wait: number, funct: (...args: T) => void, ...args: T) => {
+    return <T extends unknown[]>(wait: number, funct: (...args: T) => void, ...args: T) => {
         clearTimeout(timer);
         timer = setTimeout(() => funct(...args), wait);
     };
 };
-export const debounce = debounceGenerator();
+export const debounce = debounceFactory();
 
 /**
  * 节流
  * 时间戳实现
  */
-const throttleGenerator = () => {
+const throttleFactory = () => {
     let previous = 0;
-    return <T extends PossibleParams[]>(wait: number, funct: (...args: T) => void, ...args: T) => {
+    return <T extends unknown[]>(wait: number, funct: (...args: T) => void, ...args: T) => {
         const now = +new Date();
         if (now - previous > wait) {
             funct(...args);
@@ -27,6 +25,6 @@ const throttleGenerator = () => {
         }
     };
 };
-export const throttle = throttleGenerator();
+export const throttle = throttleFactory();
 
 export default { debounce, throttle };
