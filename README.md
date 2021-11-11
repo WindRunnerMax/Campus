@@ -141,7 +141,7 @@ import { Component, Vue } from "vue-property-decorator";
 // 此处示例的引入方式是作为`npm`依赖包的引入方式，并非上述示例中的方式，其他组件同此处
 import CTimeTableHeader from "shst-campus/lib/c-time-table-header/c-time-table-header.vue";
 import CTimeTableBody from "shst-campus/lib/c-time-table-body/c-time-table-body.vue";
-import { DefinedTableItem } from "shst-campus/lib/types/timetable";
+import { DefinedTableItem } from "shst-campus/lib/types/time-table";
 
 @Component({
     components: { CTimeTableHeader, CTimeTableBody },
