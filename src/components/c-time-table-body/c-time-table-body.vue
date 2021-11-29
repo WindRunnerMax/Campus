@@ -15,22 +15,23 @@
                 <view
                     v-for="(column, columnIndex) in row"
                     :key="columnIndex"
-                    class="a-full"
+                    class="a-flex a-flex-full"
                     @click="column.single && showDetail(column.all)"
                 >
                     <view
                         v-if="column.single"
-                        class="table-unit"
+                        class="a-flex-full table-unit"
                         :style="{ 'background': column.single.background }"
                     >
                         <view>
                             <view>{{ column.single.className }}</view>
                             <view>{{ column.single.classRoom }}</view>
                             <view>{{ column.single.teacher }}</view>
+                            <view v-if="column.single.ext">{{ column.single.ext }}</view>
                         </view>
-                        <view class="triangle" v-if="column.all.length > 1"></view>
+                        <view v-if="column.all.length > 1" class="triangle"></view>
                     </view>
-                    <view v-else class="table-unit"></view>
+                    <view v-else class="table-unit a-flex-full"></view>
                 </view>
             </view>
             <view class="a-hr hr"></view>
@@ -50,19 +51,25 @@
                         <view class="a-dot" :style="{ 'background': item.background }"></view>
                         <view>{{ item.className }}</view>
                     </view>
-                    <view class="a-flex-space-between a-mt">
+                    <view class="a-flex-space-between a-pt">
                         <view class="a-y-center">
                             <view class="a-dot a-background-grey"></view>
                             <view>教室</view>
                         </view>
                         <view>{{ item.classRoom }}</view>
                     </view>
-                    <view class="a-flex-space-between a-mt">
+                    <view class="a-flex-space-between a-pt">
                         <view class="a-y-center">
                             <view class="a-dot a-background-grey"></view>
                             <view>讲师</view>
                         </view>
                         <view>{{ item.teacher }}</view>
+                    </view>
+                    <view v-if="item.ext" class="a-flex-space-between a-pt">
+                        <view class="a-y-center">
+                            <view class="a-dot a-background-grey"></view>
+                            <view>{{ item.ext }}</view>
+                        </view>
                     </view>
                 </view>
             </view>
@@ -130,9 +137,15 @@ export default class CTimeTableBody extends Vue {
                 className: v.className,
                 classRoom: v.classRoom,
                 teacher: v.teacher,
-                background: COLOR_LIST[namePathNumber % COLOR_LIST.length],
+                background: v.background || COLOR_LIST[namePathNumber % COLOR_LIST.length],
+                ext: v.ext,
+                curWeek: v.curWeek,
             };
-            tables[rowIndex][columnIndex].single = single;
+            if (tables[rowIndex][columnIndex].single) {
+                if (single.curWeek) tables[rowIndex][columnIndex].single = single;
+            } else {
+                tables[rowIndex][columnIndex].single = single;
+            }
             tables[rowIndex][columnIndex].all.push(single);
         });
         return tables;
