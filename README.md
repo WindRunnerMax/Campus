@@ -106,7 +106,7 @@ module.exports = {
 };
 ```
 
-近日又研究了一下相关的代码以及框架`babel`的处理方案，实现了按需引用`babel-plugin`的解决方案，与`webpack-loader`解决方案二选一，需要配置`babel.config.js`，详细配置可以查看`https://github.com/SHST-SDUST/SHST-PLUS/blob/master/babel.config.js`。
+近日又研究了一下相关的代码以及`uniapp`框架`babel`的处理方案，实现了按需引用`babel-plugin`的解决方案，与`webpack-loader`解决方案二选一，需要配置`babel.config.js`，详细配置可以查看`https://github.com/SHST-SDUST/SHST-PLUS/blob/master/babel.config.js`。
 
 ```shell
 $ yarn add -D uniapp-import-loader
