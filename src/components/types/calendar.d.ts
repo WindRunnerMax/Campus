@@ -2,7 +2,6 @@ export interface CalendarItem {
     day: string;
     type: {
         today: boolean;
-        today: boolean;
         flag: boolean;
         work: boolean;
         weekend: boolean;
